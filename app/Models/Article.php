@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Models;
+
+use App\Models\Image;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class Article extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'title',
+        'sku',
+        'image',
+        'description',
+        'price',
+        'discount',
+        'stock',
+        'unit',
+        'is_active',
+        'slug',
+        'published_at',
+    ];
+
+    /**
+     * Relazione con l'utente (proprietario dell'articolo)
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function images()
+{
+    return $this->hasMany(Image::class);
+}
+}

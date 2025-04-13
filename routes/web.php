@@ -17,3 +17,5 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::post('/articles', [ArticleController::class, 'store']);
 });
 
+
+Route::get('/articles/index', [ArticleController::class, 'index'])->name('article.index');

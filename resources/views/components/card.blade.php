@@ -1,6 +1,6 @@
 <div class="card mx-auto card-w shadow text-center mb-3 product-card h-100">
     {{-- Immagine dell'articolo --}}
-    <img src="{{ $article->images->isNotEmpty() ? url('storage/articles/' . $article->images->first()->path) : 'default-image.jpg' }}"
+    <img src="{{url('storage/' . $article->images->first()->path)}}"
         class="card-img-top img-fluid" alt="Immagine dell'articolo {{ $article->title }}"
         style="object-fit: cover; height: 200px;">
 

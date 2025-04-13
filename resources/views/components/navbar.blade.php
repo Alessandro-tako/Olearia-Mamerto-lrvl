@@ -16,6 +16,9 @@
                 <li>
                     <a class="nav-link custom-link2" href="{{ route('galleria') }}">Galleria</a>
                 </li>
+                <li>
+                    <a class="nav-link custom-link2" href="{{ route('article.index') }}">I nostri prodotti</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link custom-link3" href="{{ route('contacts') }}">Contatti</a>
                 </li>

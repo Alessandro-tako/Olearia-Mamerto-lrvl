@@ -267,3 +267,29 @@ p{
 #gallery{
     margin-top: 200px;
 }
+
+/* stile della paginazione articoli */
+.pagination .page-item {
+    margin: 0 4px; /* spazio tra i bottoni */
+}
+
+.pagination .page-link {
+    color: #198754;
+    border: 1px solid #198754;
+    border-radius: 10px; /* angoli tondeggianti */
+    padding: 8px 12px;
+    transition: all 0.3s ease;
+}
+
+.pagination .page-link:hover {
+    background-color: #198754;
+    color:black;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #198754;
+    border-color: #198754;
+    color: black;
+    font-weight: bold;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}

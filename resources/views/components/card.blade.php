@@ -1,7 +1,7 @@
 <div class="card mx-auto product-card shadow text-center mb-4 h-100 border-0 custom-card">
     {{-- Immagine dell'articolo --}}
     <div class="card-img-container overflow-hidden" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem;">
-        <img src="{{ url('storage/' . $article->images->first()->path) }}" class="card-img-top img-fluid hover-zoom"
+        <img src="{{ $article->images->isNotEmpty() ? $article->images->first()->getUrl(300, 300) : Storage::url('images/300788628_1079807456076614_8301764200808451309_n.jpg') }}" class="card-img-top img-fluid hover-zoom"
             alt="Immagine dell'articolo {{ $article->title }}">
     </div>
 

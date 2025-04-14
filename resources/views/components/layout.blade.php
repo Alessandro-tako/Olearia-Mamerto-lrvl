@@ -12,6 +12,8 @@
     <script type="text/javascript" src="https://cs.iubenda.com/autoblocking/3881849.js"></script>
     <script type="text/javascript" src="//cdn.iubenda.com/cs/gpp/stub.js"></script>
     <script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script> --}}
+    {{-- favicon --}}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.png') }}">
     <!-- bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">

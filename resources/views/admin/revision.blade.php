@@ -21,7 +21,7 @@
                                     <div class="mb-3 ">
                                         <div class="row g-0 ">
                                             <div class="col-12">
-                                                <img src="{{ Storage::url($image->path) }}"
+                                                <img src="{{$image->getUrl(300, 300) }}"
                                                     class="img-fluid rounded-start"
                                                     alt="Immagine {{ $key + 1 }} dell'articolo '{{ $article_to_check->title }}'">
                                             </div>

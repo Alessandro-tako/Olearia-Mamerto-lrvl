@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use App\Jobs\ResizeImage;
 
 class Form extends Component
 {
@@ -122,9 +123,11 @@ class Form extends Component
                 if (is_object($image)) {
                     $path = $image->store("articles/{$this->article->id}", 'public');
                     $this->article->images()->create(['path' => $path]);
+                    dispatch(new ResizeImage($path, 300, 300));
                 }
             }
         }
+        
 
         File::deleteDirectory(storage_path('/app/livewire-tmp'));
 

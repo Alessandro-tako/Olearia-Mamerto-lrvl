@@ -2,6 +2,7 @@
     <header class="bg-dark text-white text-center py-3">
         <h1>Profilo {{ $user->name }}</h1>
     </header>
+    <x-success-message></x-success-message>
     <main class="container mt-4">
         <div class="row height-custom justify-content-center align-items-center py-5">
             <!-- Sezione Profilo -->
@@ -13,6 +14,13 @@
                     <h2>Amministratore</h2>
                     <p>Ciao <strong>{{ $user->name }}</strong> qui potrai modificare o eliminare i tuoi articoli</p>
                 </div>
+            </div>
+            <div>
+                @if (session()->has('errorMessage'))
+                    <div class="alert alert-danger text-center shadow rounded w-50">
+                        {{ session('errorMessage') }}
+                    </div>
+                @endif
             </div>
 
             <!-- Sezione Prodotti -->
@@ -54,13 +62,6 @@
                         </div>
                     @endforelse
                 </div>
-            </div>
-            <div>
-                @if (session()->has('errorMessage'))
-                    <div class="alert alert-danger text-center shadow rounded w-50">
-                        {{ session('errorMessage') }}
-                    </div>
-                @endif
             </div>
         </div>
         <div class="d-flex justify-content-center">

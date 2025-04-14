@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Jobs\ResizeImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -81,7 +82,7 @@ class ArticleController extends Controller implements HasMiddleware
             'published_at' => 'nullable|date',
             'images.*' => 'image|max:2048',
         ]);
-
+    
         // Aggiorna l'articolo con i nuovi dati
         $article->update([
             'title' => $validated['title'],
@@ -93,7 +94,7 @@ class ArticleController extends Controller implements HasMiddleware
             'unit' => $validated['unit'],
             'is_accepted' => NULL,
         ]);
-
+    
         // Gestione delle immagini
         if ($request->hasFile('images')) {
             // Elimina le immagini esistenti
@@ -101,15 +102,19 @@ class ArticleController extends Controller implements HasMiddleware
                 Storage::disk('public')->delete($image->path);
                 $image->delete();
             }
-
-            // Salva le nuove immagini
+    
+            // Salva le nuove immagini e ridimensiona
             foreach ($request->file('images') as $image) {
                 $path = $image->store("articles/{$article->id}", 'public');
                 $article->images()->create(['path' => $path]);
+    
+                // Lancia il job per il ridimensionamento
+                dispatch(new ResizeImage($path, 300, 300));
             }
         }
+    
         $article->setAccepted(null);
-        // Redirect con messaggio di successo
+    
         return redirect()->route('article.edit', $article->id)
                         ->with('message', 'Articolo aggiornato con successo!');
     }

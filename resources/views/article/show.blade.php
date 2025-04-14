@@ -10,7 +10,7 @@
                     <div class="d-flex flex-column align-items-center">
                         <!-- Immagine principale -->
                         <div class="main-image mb-4">
-                            <img id="mainImage" src="{{ Storage::url($article->images[0]->path) }}"
+                            <img id="mainImage" src="{{ $article->images[0]->getUrl(300, 300) }}"
                                 class="img-fluid rounded shadow"
                                 alt="immagine principale dell'articolo {{ $article->title }}"
                                 style="max-height: 400px; object-fit: cover;">
@@ -22,9 +22,9 @@
                                 <div style="width: 80px; height: 80px; overflow: hidden; border-radius: 10px; border: 2px solid #ccc; cursor: pointer; transition: all 0.3s;"
                                     onmouseover="this.style.borderColor='#333'"
                                     onmouseout="this.style.borderColor='#ccc'">
-                                    <img src="{{ Storage::url($image->path) }}"
-                                        data-image="{{ Storage::url($image->path) }}" onclick="changeMainImage(this)"
-                                        alt="anteprima {{ $key + 1 }}"
+                                    <img src="{{ $image->getUrl(300, 300) }}"
+                                        data-image="{{ $image->getUrl(300, 300) }}" alt="anteprima {{ $key + 1 }}"
+                                        onclick="changeMainImage(this)"
                                         style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                             @endforeach
@@ -39,7 +39,6 @@
             <div class="col-12 col-md-6 mb-3 text-center">
                 <h2 class="display-5"><span class="fw-bold">Titolo: </span> {{ $article->title }}</h2>
                 <div class="d-flex flex-column justify-content-center h-75">
-                    {{-- <h4 class="fw-bold">Prezzo: {{ $article->price }} €</h4> --}}
                     <h4 class="card-price">Prezzo:
                         €{{ number_format($article->price - $article->discount, 2, ',', '.') }}
                         @if ($article->discount > 0)
@@ -53,7 +52,6 @@
                     <button wire:click="$emitTo('cart', 'addToCart', {{ $article->id }})" class="btn btn-success">
                         Aggiungi al carrello
                     </button>
-                    
                 </div>
             </div>
         </div>

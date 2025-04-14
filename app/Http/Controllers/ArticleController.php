@@ -48,7 +48,7 @@ class ArticleController extends Controller implements HasMiddleware
     // profilo amministratore
     public function adminProfile()
     {
-        $articles = Article::where('user_id', auth()->id())->orderBy('created_at', 'desc')->paginate(6);
+        $articles = Article::orderBy('created_at', 'desc')->paginate(6);
         $user = auth()->user();
         return view('admin.profile', compact('articles', 'user'));
     }

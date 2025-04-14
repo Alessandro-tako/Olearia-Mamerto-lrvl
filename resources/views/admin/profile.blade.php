@@ -22,33 +22,33 @@
                     @forelse ($articles as $article)
                         <div class="col-12 col-md-4">
                             <x-card :article="$article">
-                                @if (Auth::check() && Auth::user()->id === $article->user_id)
-                                    <div class="row">
-                                        <div class="col-12 col-md-6">
-                                            <a href="{{ route('article.edit', $article->id) }}"
-                                                class="btn btn-secondary rounded-pill my-2"><i
-                                                    class="bi bi-pencil-fill"></i>
-                                                Modifica</a>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <form action="{{ route('articles.destroy', $article) }}" method="POST"
-                                                class="d-inline"
-                                                onsubmit="return confirm('Sicuro di voler eliminare?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger rounded-pill my-2"><i
-                                                        class="bi bi-trash-fill"></i>
-                                                    Elimina</button>
-                                            </form>
-                                        </div>
+                                @if (Auth::check() && (Auth::user()->id === $article->user_id || Auth::user()->is_admin))
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <a href="{{ route('article.edit', $article->id) }}"
+                                            class="btn btn-secondary rounded-pill my-2"><i class="bi bi-pencil-fill"></i>
+                                            Modifica</a>
                                     </div>
-                                @endif
+                                    <div class="col-12 col-md-6">
+                                        <form action="{{ route('articles.destroy', $article) }}" method="POST"
+                                            class="d-inline"
+                                            onsubmit="return confirm('Sicuro di voler eliminare?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger rounded-pill my-2"><i
+                                                    class="bi bi-trash-fill"></i>
+                                                Elimina</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            @endif
+                            
                             </x-card>
                         </div>
                     @empty
                         <div class="text-center">
                             <h3>Non ci sono Articoli</h3>
-                            <a href="{{ route('articles.create') }}" class="btn btn-success mt-2">
+                            <a href="{{ route('article.create') }}" class="btn btn-success mt-2">
                                 Creane uno ora
                             </a>
                         </div>

@@ -4,6 +4,7 @@ use App\Livewire\Cart;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\RevisionController;
 
 Route::get('/', [PageController::class, 'homepage'])->name('homepage');
 Route::get('/contatti', [PageController::class, 'contacts'])->name('contacts');
@@ -13,10 +14,11 @@ Route::get('/galleria', [PageController::class, 'gallery'])->name('galleria');
 // rotta per la creazione dei prodotti solo per l'amministratore
 Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/profilo/admin', [ArticleController::class, 'adminProfile'])->name('admin.profile');
-    Route::get('/articles/create', [ArticleController::class, 'create'])
-    ->middleware(['auth', 'isAdmin'])
-    ->name('article.create');
+    Route::get('/articles/create', [ArticleController::class, 'create'])->middleware(['auth', 'isAdmin'])->name('article.create');
     Route::post('/articles', [ArticleController::class, 'store']);
+    Route::get('/revisor/index', [RevisionController::class, 'index'])->middleware(['auth','isAdmin'])->name('revision.index');
+    Route::patch('accept/{article}', [RevisionController::class, 'accept'])->name('accept');
+    Route::patch('/reject/{article}', [RevisionController::class, 'reject'])->name('reject');
 });
 
 // rotte di visualizzazione degli articoli

@@ -22,7 +22,7 @@ class ArticleController extends Controller implements HasMiddleware
     // dettaglio tutti gli articoli
     public function index()
     {
-        $articles = Article::orderBy('created_at', 'desc')->paginate(6);
+        $articles = Article::where('is_accepted',true)->orderBy('created_at', 'desc')->paginate(6);
         return view('article.index', compact('articles'));
     }
     //pagina creazione articoli
@@ -91,7 +91,7 @@ class ArticleController extends Controller implements HasMiddleware
             'discount' => $validated['discount'],
             'stock' => $validated['stock'],
             'unit' => $validated['unit'],
-            
+            'is_accepted' => NULL,
         ]);
 
         // Gestione delle immagini
@@ -108,7 +108,7 @@ class ArticleController extends Controller implements HasMiddleware
                 $article->images()->create(['path' => $path]);
             }
         }
-
+        $article->setAccepted(null);
         // Redirect con messaggio di successo
         return redirect()->route('article.edit', $article->id)
                         ->with('message', 'Articolo aggiornato con successo!');

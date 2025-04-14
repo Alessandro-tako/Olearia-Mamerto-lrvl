@@ -43,6 +43,18 @@
                                         Vai al profilo Amministratore
                                     </a>
                                 </li>
+                                <li>
+                                    <a class="dropdown-item drop-menu" href="{{ route('revision.index') }}">Articoli da
+                                        Revisionare
+                                        @if (\App\Models\Article::ToBeRevisedCount() > 0)
+                                            <span
+                                                class="badge rounded-circle bg-success text-white">
+                                                {{ \App\Models\Article::toBeRevisedCount() }}
+                                            </span>
+                                        @endif
+
+                                    </a>
+                                </li>
                             @else
                                 <li><a href="{{ route('user.profile') }}" class="dropdown-item drop-menu">
                                         Vai al profilo

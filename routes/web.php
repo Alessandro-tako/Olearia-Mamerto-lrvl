@@ -12,6 +12,7 @@ Route::get('/galleria', [PageController::class, 'gallery'])->name('galleria');
 
 // rotta per la creazione dei prodotti solo per l'amministratore
 Route::middleware(['auth', 'isAdmin'])->group(function () {
+    Route::get('/profilo/admin', [ArticleController::class, 'adminProfile'])->name('admin.profile');
     Route::get('/articles/create', [ArticleController::class, 'create'])
     ->middleware(['auth', 'isAdmin'])
     ->name('article.create');
@@ -30,4 +31,5 @@ Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->nam
 Route::get('/cart', [ArticleController::class, 'cart'])->name('cart');
 
 // profilo
-Route::get('/profilo', [ArticleController::class, 'adminProfile'])->name('profile');
+Route::get('/profilo', [ArticleController::class, 'profile'])->name('user.profile');
+

@@ -4,21 +4,22 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
 class IsAdmin
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next)
     {
-        if (auth()->check() && auth()->user()->is_admin) {
-            return $next($request);
+        if (!Auth::check()) {
+            // Se non loggato, reindirizza al login con un messaggio
+            return redirect()->route('login')->with('error', 'Devi accedere per vedere questa pagina.');
         }
 
-        abort(403, 'Accesso negato');
+        if (!Auth::user()->is_admin) {
+            // Se loggato ma non admin, reindirizza indietro con messaggio
+            return redirect()->back()->with('error', 'Accesso non autorizzato.');
+        }
+
+        return $next($request);
     }
 }

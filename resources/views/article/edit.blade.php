@@ -63,8 +63,8 @@
 
                     <!-- Upload immagini -->
                     <div class="mb-3">
-                        <label>Carica Immagini</label>
-                        <input type="file" class="form-control" name="images[]" id="imageInput" multiple>
+                        <label for="imageInput" class="btn btn-success rounded-pill">Carica Immagini</label>
+                        <input type="file" class="form-control d-none" name="images[]" id="imageInput" multiple>
                         @error('images.*') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
 

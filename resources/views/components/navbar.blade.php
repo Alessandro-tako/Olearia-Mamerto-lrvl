@@ -39,20 +39,24 @@
                             @if (Auth::check() && Auth::user()->is_admin)
                                 <li><a href="{{ route('article.create') }}" class="dropdown-item">Inserisci un
                                         prodotto</a></li>
-                                <li><a href="{{ route('profile') }}" class="dropdown-item drop-menu">
-                                        Vai al profilo
+                                <li><a href="{{ route('admin.profile') }}" class="dropdown-item drop-menu">
+                                        Vai al profilo Amministratore
                                     </a>
                                 </li>
+                            @else
+                                <li><a href="{{ route('user.profile') }}" class="dropdown-item drop-menu">
+                                        Vai al profilo
+                                    </a>
+                                <li>
                             @endif
-                            <li>
-                                <form action="{{ route('logout') }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item">Logout</button>
-                                </form>
-                            </li>
-                        </ul>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item">Logout</button>
+                            </form>
                     </li>
-                @endif
+            </ul>
+            </li>
+            @endif
             </ul>
         </div>
     </div>

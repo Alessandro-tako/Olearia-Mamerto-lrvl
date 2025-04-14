@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller implements HasMiddleware
 {
@@ -14,37 +15,37 @@ class ArticleController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('auth'), // Assicurati che l'utente sia autenticato
+            // new Middleware('auth'), // Assicurati che l'utente sia autenticato
             new Middleware('isAdmin', only: ['create']) // Solo gli admin possono creare articoli
         ];
     }
-
+    // dettaglio tutti gli articoli
     public function index()
     {
         $articles = Article::orderBy('created_at', 'desc')->paginate(6);
         return view('article.index', compact('articles'));
     }
-
+    //pagina creazione articoli
     public function create()
     {
         return view('article.create');
     }
-
+    // per il dettaglio degli articoli
     public function show(Article $article){
         
         return view('article.show', compact('article'));
     }
-    
+    // da fare per il carrelo
     public function cart()
     {
         return view('article.cart');
     }
-
+    // modifica dell'articolo
     public function edit(Article $article)
     {
         return view('article.edit', compact('article'));
     }
-
+    // profilo amministratore
     public function adminProfile()
     {
         $articles = Article::where('user_id', auth()->id())->orderBy('created_at', 'desc')->paginate(6);
@@ -52,13 +53,20 @@ class ArticleController extends Controller implements HasMiddleware
         return view('admin.profile', compact('articles', 'user'));
     }
 
+    // profilo utente
+    public function profile()
+    {
+        $user = Auth::user();
+        return view('user.profile', compact('user'));
+    }
+    // elimina articolo
     public function destroy(Article $article)
     {
         $article->delete();
     
         return redirect()->back()->with('success', 'Articolo eliminato con successo.');
     }
-
+    // logica della modifica dell'articolo
     public function update(Request $request, Article $article)
     {
         // Validazione dei dati

@@ -1,11 +1,12 @@
 <nav class="navbar navbar-expand-lg nav-cus fixed-top" data-bs-theme="dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ route('homepage') }}">
-            <img class="navbar-logo" src="{{Storage::url('images/300788628_1079807456076614_8301764200808451309_n.jpg')}}" alt="">
-            Olearia Mamerto 
+            <img class="navbar-logo"
+                src="{{ Storage::url('images/300788628_1079807456076614_8301764200808451309_n.jpg') }}" alt="">
+            Olearia Mamerto
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -30,12 +31,18 @@
                     </li>
                 @else
                     <li class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
                             <i class="bi bi-person-circle"></i> Ciao {{ Auth::user()->name }}
                         </a>
                         <ul class="dropdown-menu">
                             @if (Auth::check() && Auth::user()->is_admin)
-                            <li><a href="{{ route('article.create') }}" class="dropdown-item">Inserisci un prodotto</a></li>   
+                                <li><a href="{{ route('article.create') }}" class="dropdown-item">Inserisci un
+                                        prodotto</a></li>
+                                <li><a href="{{ route('profile') }}" class="dropdown-item drop-menu">
+                                        Vai al profilo
+                                    </a>
+                                </li>
                             @endif
                             <li>
                                 <form action="{{ route('logout') }}" method="POST">

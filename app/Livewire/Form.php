@@ -21,25 +21,57 @@ class Form extends Component
     public $stock = 0;
     public $unit = 'pz';
     public $published_at;
-    public $category = '';
     public $temporary_images = [];
     public $images = [];
     public $article;
+    public $articleId;
+    public $editMode = false;
 
     // Regole di validazione
-    protected $rules = [
-        'title' => 'required|string|max:255',
-        'sku' => 'nullable|string|unique:articles,sku',
-        'description' => 'nullable|string',
-        'price' => 'required|numeric|min:0',
-        'discount' => 'nullable|numeric|min:0',
-        'stock' => 'required|integer|min:0',
-        'unit' => 'nullable|string|max:10',
-        'published_at' => 'nullable|date',
-        'temporary_images.*' => 'image|max:2048',
-    ];
+    protected function rules()
+    {
+        $skuRule = $this->editMode
+            ? 'nullable|string|unique:articles,sku,' . $this->articleId
+            : 'nullable|string|unique:articles,sku';
 
-    // Quando vengono aggiornate le immagini temporanee
+        return [
+            'title' => 'required|string|max:255',
+            'sku' => $skuRule,
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'discount' => 'nullable|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'unit' => 'nullable|string|max:10',
+            'published_at' => 'nullable|date',
+            'temporary_images.*' => 'image|max:2048',
+        ];
+    }
+
+    public function mount($articleId = null)
+    {
+        if ($articleId) {
+            $this->editMode = true;
+            $this->articleId = $articleId;
+            $this->article = Article::with('images')->findOrFail($articleId);
+
+            $this->title = $this->article->title;
+            $this->sku = $this->article->sku;
+            $this->description = $this->article->description;
+            $this->price = $this->article->price;
+            $this->discount = $this->article->discount;
+            $this->stock = $this->article->stock;
+            $this->unit = $this->article->unit;
+            $this->published_at = $this->article->published_at;
+
+            foreach ($this->article->images as $img) {
+                $this->images[] = [
+                    'id' => $img->id,
+                    'path' => $img->path,
+                ];
+            }
+        }
+    }
+
     public function updatedTemporaryImages()
     {
         foreach ($this->temporary_images as $image) {
@@ -47,7 +79,6 @@ class Form extends Component
         }
     }
 
-    // Rimuove un'immagine
     public function removeImage($key)
     {
         if (isset($this->images[$key])) {
@@ -55,12 +86,23 @@ class Form extends Component
         }
     }
 
-    // Salva l'articolo
+    public function deleteExistingImage($imageId)
+    {
+        $image = $this->article->images()->find($imageId);
+        if ($image) {
+            \Storage::disk('public')->delete($image->path);
+            $image->delete();
+
+            $this->images = array_filter($this->images, function ($img) use ($imageId) {
+                return $img['id'] ?? null !== $imageId;
+            });
+        }
+    }
+
     public function store()
     {
         $this->validate();
 
-        // Creazione dell'articolo
         $this->article = Article::create([
             'user_id' => auth()->id(),
             'title' => $this->title,
@@ -71,33 +113,33 @@ class Form extends Component
             'stock' => $this->stock,
             'unit' => $this->unit,
             'published_at' => $this->published_at,
-            'category_id' => $this->category,
-            'is_active' => false, // Articolo in attesa di approvazione
+            'is_active' => false,
             'slug' => Str::slug($this->title) . '-' . uniqid(),
         ]);
 
-        // Salvataggio delle immagini
         if (count($this->images) > 0) {
             foreach ($this->images as $image) {
-                $newFileName = "articles/{$this->article->id}";
-                $newImage = $this->article->images()->create(['path' => $image->store($newFileName, 'public')]);
+                if (is_object($image)) {
+                    $path = $image->store("articles/{$this->article->id}", 'public');
+                    $this->article->images()->create(['path' => $path]);
+                }
             }
-            
         }
 
-        // Pulizia delle immagini temporanee
         File::deleteDirectory(storage_path('/app/livewire-tmp'));
 
-        // Messaggio di successo
         session()->flash('message', 'Articolo creato con successo e in attesa di approvazione.');
 
-        // Reset del modulo
-        $this->reset([
-            'title', 'sku', 'description', 'price', 'discount', 'stock',
-            'unit', 'published_at', 'category', 'temporary_images', 'images'
-        ]);
+        $this->resetForm();
     }
 
+    private function resetForm()
+    {
+        $this->reset([
+            'title', 'sku', 'description', 'price', 'discount', 'stock',
+            'unit', 'published_at', 'temporary_images', 'images'
+        ]);
+    }
 
     public function render()
     {

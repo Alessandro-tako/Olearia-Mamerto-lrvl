@@ -57,8 +57,10 @@ class ArticleController extends Controller implements HasMiddleware
     // profilo utente
     public function profile()
     {
-        $user = Auth::user();
-        return view('user.profile', compact('user'));
+        $user = auth()->user(); // Recupera l'utente loggato
+        $shippingAddress = $user->shippingAddress; // Recupera l'indirizzo di spedizione dell'utente
+    
+        return view('user.profile', compact('user', 'shippingAddress'));
     }
     // elimina articolo
     public function destroy(Article $article)

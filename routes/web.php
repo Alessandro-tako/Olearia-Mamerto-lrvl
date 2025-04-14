@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\RevisionController;
+use App\Http\Controllers\ShippingAddressController;
 
 Route::get('/', [PageController::class, 'homepage'])->name('homepage');
 Route::get('/contatti', [PageController::class, 'contacts'])->name('contacts');
@@ -34,6 +35,11 @@ Route::get('/cart', [ArticleController::class, 'cart'])->name('cart');
 
 // profilo
 Route::get('/profilo', [ArticleController::class, 'profile'])->name('user.profile');
+// elementi per la spedizione
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile/shipping-address', [ShippingAddressController::class, 'edit'])->name('user.shipping');
+    Route::put('/profile/shipping-address', [ShippingAddressController::class, 'update'])->name('user.edit');
+});
 
 // Ricerca
 Route::get('/search/article', [ArticleController::class, 'searchArticles'])->name('article.search');

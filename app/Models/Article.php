@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Image;
 use App\Models\Article;
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Article extends Model
 {
     use HasFactory;
+    use Searchable;
 
     protected $fillable = [
         'user_id',
@@ -52,5 +54,12 @@ class Article extends Model
         return true;
     }
 
-
+    public function toSearchableArray()
+    {
+        return [
+            'id'=>$this->id,
+            'title' =>$this->title,
+            'description'=>$this->description,
+        ];
+    }
 }

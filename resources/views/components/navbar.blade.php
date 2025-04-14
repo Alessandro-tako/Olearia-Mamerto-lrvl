@@ -9,7 +9,16 @@
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        {{-- menu a tendina per il response --}}
+        <div class="collapse navbar-collapse text-center" id="navbarSupportedContent">
+            {{-- barra di ricerca --}}
+            <form class="d-flex ms-auto" role="search" action="{{ route('article.search') }}" method="GET">
+                <div class="input-group gap-2">
+                    <input class="form-control rounded-pill px-5 mx-3" type="search" name="query" placeholder="Cerca"
+                        aria-label="Search">
+                </div>
+                <button class="btn rounded-pill btn-success " type="submit"><i class="bi bi-search"></i></button>
+            </form>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link custom-link1" aria-current="page" href="{{ route('chi-siamo') }}">Chi Siamo</a>
@@ -47,8 +56,7 @@
                                     <a class="dropdown-item drop-menu" href="{{ route('revision.index') }}">Articoli da
                                         Revisionare
                                         @if (\App\Models\Article::ToBeRevisedCount() > 0)
-                                            <span
-                                                class="badge rounded-circle bg-success text-white">
+                                            <span class="badge rounded-circle bg-success text-white">
                                                 {{ \App\Models\Article::toBeRevisedCount() }}
                                             </span>
                                         @endif

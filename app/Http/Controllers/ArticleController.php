@@ -113,4 +113,11 @@ class ArticleController extends Controller implements HasMiddleware
         return redirect()->route('article.edit', $article->id)
                         ->with('message', 'Articolo aggiornato con successo!');
     }
+
+    public function searchArticles(Request $request)
+    {
+        $query = $request->input('query');
+        $articles = Article::search($query)->where('is_accepted', true)->paginate(10);
+        return view('article.searched', ['articles' => $articles, 'query' => $query]);
+    }
 }

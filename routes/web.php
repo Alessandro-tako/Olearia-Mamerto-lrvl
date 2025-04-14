@@ -35,3 +35,5 @@ Route::get('/cart', [ArticleController::class, 'cart'])->name('cart');
 // profilo
 Route::get('/profilo', [ArticleController::class, 'profile'])->name('user.profile');
 
+// Ricerca
+Route::get('/search/article', [ArticleController::class, 'searchArticles'])->name('article.search');

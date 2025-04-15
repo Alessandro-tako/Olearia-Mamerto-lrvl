@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Cart;
 use App\Models\Article;
 use App\Models\ShippingAddress;
 use Illuminate\Notifications\Notifiable;
@@ -64,6 +65,11 @@ class User extends Authenticatable
     public function shippingAddress()
     {
         return $this->hasOne(ShippingAddress::class);
+    }
+
+    public function carts() : HasMany
+    {
+        return $this->hasMany(Cart::class);
     }
 
 

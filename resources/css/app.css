@@ -69,6 +69,31 @@ p{
 .custom-link3 {
     color: red;
 }
+/* bottone custom */
+.btn-custom {
+    background-color: green; /* Verde personalizzato */
+    color: white;
+    border-radius: 50px; /* Effetto pill */
+    padding: 10px 20px; /* Regola la spaziatura interna */
+    font-size: 16px; /* Imposta una dimensione del testo */
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+    border: none;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-custom:hover {
+    background-color: #157347; /* Colore verde più scuro al passaggio del mouse */
+    transform: scale(1.05); /* Leggera animazione di ingrandimento */
+}
+
+.btn-custom:focus {
+    outline: none; /* Rimuove il contorno durante il focus */
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25); /* Effetto focus */
+}
+
 
 
 
@@ -295,43 +320,6 @@ p{
 }
 
 /* stile delle card */
-/* effetto neon cafone ahahahah */
-/* .custom-card {
-    background: black;
-    border-radius: 1rem;
-    transition: all 0.3s ease-in-out;
-    border: 1px solid rgba(0, 255, 0, 0.3);
-    box-shadow: 0 0 8px rgba(0, 255, 0, 0.116);
-    color: #e0ffe0;
-}
-
-.custom-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 0 12px rgba(0, 255, 0, 0.5), 0 0 25px rgba(0, 255, 0, 0.3);
-}
-
-.card-title, .card-price {
-    color: #00ff88;
-    text-shadow: 0 0 4px #00ff88, 0 0 10px #00ff88;
-}
-
-.card-text {
-    color: #c0ffc0;
-}
-
-.product-card .btn {
-    background-color: transparent;
-    border: 1px solid #00ff88;
-    color: #00ff88;
-    transition: all 0.3s ease;
-    text-shadow: 0 0 3px #00ff88;
-}
-
-.product-card .btn:hover {
-    background-color: #00ff88;
-    color: #000;
-    box-shadow: 0 0 8px #00ff88, 0 0 20px #00ff88;
-} */
 .custom-card {
     background: wite;
     border-radius: 1.5rem;

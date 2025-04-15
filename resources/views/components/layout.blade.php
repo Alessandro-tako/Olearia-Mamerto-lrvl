@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <!-- banner cookie -->
+    <!-- banner cookie -->
     {{-- <script type="text/javascript">
         var _iub = _iub || [];
         _iub.csConfiguration = { "siteId": 3881849, "cookiePolicyId": 18156025, "lang": "it", "storage": { "useSiteId": true } };
@@ -26,12 +27,24 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <title>Olearia Mamerto</title>
 </head>
+
 <body>
     <x-navbar></x-navbar>
-    {{$slot}}
+    @if (session('message'))
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)"
+            class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('message') }}
+            <button type="button" class="btn-close" @click="show = false" aria-label="Chiudi"></button>
+        </div>
+    @endif
+
+    {{ $slot }}
     <a href="https://wa.me/3382017840" class="whatsapp-icon" target="_blank">
         <i class="bi bi-whatsapp"></i>
     </a>
     <x-footer></x-footer>
+    <script src="//unpkg.com/alpinejs" defer></script>
+
 </body>
+
 </html>

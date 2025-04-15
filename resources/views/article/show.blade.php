@@ -4,7 +4,7 @@
             <div class="col-12 py-5 my-2">
                 <h1 class="display-4">Dettaglio: {{ $article->title }}</h1>
             </div>
-
+            <x-success-message></x-success-message>
             <div class="col-12 col-md-6 mb-3">
                 @if ($article->images->count() > 0)
                     <div class="d-flex flex-column align-items-center">
@@ -49,9 +49,11 @@
                     </h4>
                     <h5>Descrizione:</h5>
                     <p>{{ $article->description }}</p>
-                    <button wire:click="$emitTo('cart', 'addToCart', {{ $article->id }})" class="btn btn-success">
-                        Aggiungi al carrello
-                    </button>
+                    <!-- Aggiungi il pulsante per il carrello -->
+            <form action="{{ route('cart.add', $article->id) }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-success rounded-pill">Aggiungi al carrello</button>
+            </form>
                 </div>
             </div>
         </div>

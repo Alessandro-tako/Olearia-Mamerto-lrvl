@@ -34,10 +34,10 @@
                 </div>
 
                 <div class="container">
-                    <div class="row align-items-center my-5 text-start">
+                    <div class="row text-center align-items-center my-5 text-start">
                         <p class="col-12 col-md-6">Inserisci o modifica i tuoi dati per la spedizione</p>
                         <p class="col-12 col-md-6">
-                            <a class="btn btn-success rounded-pill" href="{{ route('user.shipping') }}">Aggiungi o
+                            <a class="btn-custom" href="{{ route('user.shipping') }}">Aggiungi o
                                 modifica</a>
                         </p>
                     </div>

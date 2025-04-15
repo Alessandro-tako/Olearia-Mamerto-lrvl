@@ -96,7 +96,7 @@
 
         <!-- Pulsante -->
         <div class="d-grid">
-            <button type="submit" class="btn btn-success">
+            <button type="submit" class="btn-custom">
                 {{ $editMode ? 'Aggiorna Articolo' : 'Crea Articolo' }}
             </button>
         </div>

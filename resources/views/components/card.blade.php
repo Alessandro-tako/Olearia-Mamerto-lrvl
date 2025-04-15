@@ -1,8 +1,8 @@
 <div class="card mx-auto product-card shadow text-center mb-4 h-100 border-0 custom-card">
     {{-- Immagine dell'articolo --}}
     <div class="card-img-container overflow-hidden" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem;">
-        <img src="{{ $article->images->isNotEmpty() ? $article->images->first()->getUrl(300, 300) : Storage::url('images/300788628_1079807456076614_8301764200808451309_n.jpg') }}" class="card-img-top img-fluid hover-zoom"
-            alt="Immagine dell'articolo {{ $article->title }}">
+        <img src="{{ $article->images->isNotEmpty() ? $article->images->first()->getUrl(300, 300) : Storage::url('images/300788628_1079807456076614_8301764200808451309_n.jpg') }}"
+            class="card-img-top img-fluid hover-zoom" alt="Immagine dell'articolo {{ $article->title }}">
     </div>
 
     <div class="card-body px-4 py-3">
@@ -25,9 +25,21 @@
             @endif
         </p>
 
-        <a href="{{ route('article.show', ['article' => $article->id]) }}" class="btn btn-success mt-3 px-4 rounded-pill">
-            Vai al dettaglio
-        </a>
+        <div class="container">
+            <div class="row justify-contyernt-center align-items-center">
+                <a href="{{ route('article.show', ['article' => $article->id]) }}"
+                    class="btn btn-outline-success mt-3 px-4 rounded-pill col-12 col-md-6">
+                    Vai al dettaglio
+                </a>
+                {{-- Pulsante Aggiungi al carrello --}}
+                <form class="col-12 col-md-6" action="{{ route('cart.add', $article->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn-custom mt-3 px-4">
+                        Aggiungi al carrello
+                    </button>
+                </form>
+            </div>
+        </div>
         {{ $slot }}
     </div>
 </div>

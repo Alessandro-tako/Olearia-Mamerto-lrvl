@@ -46,6 +46,11 @@ class Article extends Model
         return Article::where('is_accepted', null)->count();
     }
 
+    
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
 
     public function setAccepted($value)
     {

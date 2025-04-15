@@ -7,6 +7,7 @@
                     <h1 class="main-title-font main-title title"><span class="mainLetterTitle">O</span>learia <span
                             class="mainLetterTitle">M</span>amerto</h1>
                     <h2 class="">Olio Extravergine di alta qualità October EVOO monocultivar OTTOBRATICA</h2>
+                    <x-success-message></x-success-message>
                 </div>
             </div>
         </div>

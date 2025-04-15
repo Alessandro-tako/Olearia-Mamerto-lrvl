@@ -14,7 +14,7 @@
                 @endif
 
                 <!-- Form per modificare l'indirizzo di spedizione -->
-                <form action="{{ route('user.edit') }}" method="POST">
+                <form action="{{ route('shipping.update') }}" method="POST">
                     @csrf
                     @method('PUT')
 
@@ -70,7 +70,7 @@
                     </div>
 
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-success">Aggiorna Indirizzo</button>
+                        <button type="submit" class="btn-custom">Aggiorna Indirizzo</button>
                     </div>
                 </form>
             </div>

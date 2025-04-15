@@ -9,7 +9,7 @@
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        {{-- menu a tendina per il response --}}
+
         <div class="collapse navbar-collapse text-center" id="navbarSupportedContent">
             {{-- barra di ricerca --}}
             <form class="d-flex ms-auto" role="search" action="{{ route('article.search') }}" method="GET">
@@ -17,8 +17,9 @@
                     <input class="form-control rounded-pill px-5 mx-3" type="search" name="query" placeholder="Cerca"
                         aria-label="Search">
                 </div>
-                <button class="btn rounded-pill btn-success " type="submit"><i class="bi bi-search"></i></button>
+                <button class="btn-custom" type="submit"><i class="bi bi-search"></i></button>
             </form>
+
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link custom-link1" aria-current="page" href="{{ route('chi-siamo') }}">Chi Siamo</a>
@@ -33,7 +34,7 @@
                     <a class="nav-link custom-link3" href="{{ route('contacts') }}">Contatti</a>
                 </li>
 
-                {{-- Sezione di autenticazione per il profilo --}}
+                {{-- Sezione autenticazione --}}
                 @if (auth()->guest())
                     <li class="nav-item">
                         <a class="nav-link btn-nav px-4" href="{{ route('login') }}">Accedi</a>
@@ -46,37 +47,40 @@
                         </a>
                         <ul class="dropdown-menu">
                             @if (Auth::check() && Auth::user()->is_admin)
-                                <li><a href="{{ route('article.create') }}" class="dropdown-item">Inserisci un
-                                        prodotto</a></li>
-                                <li><a href="{{ route('admin.profile') }}" class="dropdown-item drop-menu">
-                                        Vai al profilo Amministratore
-                                    </a>
-                                </li>
+                                <li><a href="{{ route('article.create') }}" class="dropdown-item">Inserisci un prodotto</a></li>
+                                <li><a href="{{ route('admin.profile') }}" class="dropdown-item drop-menu">Vai al profilo Amministratore</a></li>
                                 <li>
-                                    <a class="dropdown-item drop-menu" href="{{ route('revision.index') }}">Articoli da
-                                        Revisionare
+                                    <a class="dropdown-item drop-menu" href="{{ route('revision.index') }}">
+                                        Articoli da Revisionare
                                         @if (\App\Models\Article::ToBeRevisedCount() > 0)
                                             <span class="badge rounded-circle bg-success text-white">
                                                 {{ \App\Models\Article::toBeRevisedCount() }}
                                             </span>
                                         @endif
-
                                     </a>
                                 </li>
                             @else
-                                <li><a href="{{ route('user.profile') }}" class="dropdown-item drop-menu">
-                                        Vai al profilo
-                                    </a>
-                                <li>
+                                <li><a href="{{ route('user.profile') }}" class="dropdown-item drop-menu">Vai al profilo</a></li>
                             @endif
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
                                 <button type="submit" class="dropdown-item">Logout</button>
                             </form>
+                        </ul>
                     </li>
-            </ul>
-            </li>
-            @endif
+                @endif
+
+                {{-- Carrello --}}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('cart.show') }}">
+                        <i class="bi bi-cart"></i>
+                        @if (\App\Models\Cart::itemCount() > 0)
+                            <span class="badge rounded-circle bg-success text-white">
+                                {{ \App\Models\Cart::itemCount() }}
+                            </span>
+                        @endif
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

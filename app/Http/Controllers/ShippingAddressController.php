@@ -29,14 +29,16 @@ class ShippingAddressController extends Controller
             'country' => 'required|string|max:255',
             'phone_number' => 'required|string|max:20',
         ]);
-
+    
         // Ottieni l'indirizzo di spedizione dell'utente
         $address = Auth::user()->shippingAddress()->updateOrCreate(
             [], // La condizione di ricerca è vuota, quindi crea un nuovo indirizzo o aggiorna quello esistente
             $validated
         );
-
-        return redirect()->route('user.profile')->with('success', 'Indirizzo aggiornato correttamente.');
+    
+        // Reindirizza al pagamento dopo l'aggiornamento dell'indirizzo
+        return redirect()->route('payment.form')->with('success', 'Indirizzo aggiornato correttamente.');
     }
+    
 
 }

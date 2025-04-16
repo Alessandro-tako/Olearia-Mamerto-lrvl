@@ -4,6 +4,7 @@ use App\Livewire\Cart;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
@@ -23,6 +24,8 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/revisor/index', [RevisionController::class, 'index'])->name('revision.index');
     Route::patch('accept/{article}', [RevisionController::class, 'accept'])->name('accept');
     Route::patch('/reject/{article}', [RevisionController::class, 'reject'])->name('reject');
+    Route::get('/admin/orders', [OrderController::class, 'adminOrders'])->name('admin.orders');
+    Route::patch('/admin/orders/{order}', [OrderController::class, 'updateStatus'])->name('order.update.status');
 });
 
 // rotte di visualizzazione degli articoli
@@ -54,11 +57,14 @@ Route::get('/search/article', [ArticleController::class, 'searchArticles'])->nam
 
 // pagamento
 Route::middleware(['auth'])->group(function () {
-    // Aggiungi qui la validazione che l'utente abbia compilato il form di spedizione
-    Route::get('/checkout', [PaymentController::class, 'checkout'])->name('paypal.checkout');
+    Route::get('/checkout/summary', [PaymentController::class, 'summary'])->name('checkout.summary');
+    Route::post('/checkout/process', [PaymentController::class, 'checkout'])->name('checkout.process');
     Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
     Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
-    Route::get('/shipping', [PaymentController::class, 'showShippingForm'])->name('shipping.form');
-    Route::get('/payment', [PaymentController::class, 'showPaymentForm'])->name('payment.form');
-    Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process');
+});
+
+// gestione e visualizzazione degli ordini
+Route::middleware('auth')->group(function () {
+    // Per l'utente
+    Route::get('/orders', [OrderController::class, 'userOrders'])->name('orders.index');
 });

@@ -6,9 +6,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
+use App\Models\Order;
+use App\Models\OrderItem;
 
 class PaymentController extends Controller
 {
+    // ✅ Pagina riepilogo
+    public function summary()
+    {
+        $cartItems = Cart::where('user_id', Auth::id())->with('article')->get();
+
+        if ($cartItems->isEmpty()) {
+            return redirect()->route('cart.show')->with('message', 'Il carrello è vuoto!');
+        }
+
+        $total = $cartItems->sum(fn($item) => $item->article->price * $item->quantity);
+
+        return view('checkout-summary', compact('cartItems', 'total'));
+    }
+
+    // ✅ Checkout → PayPal
     public function checkout()
     {
         $cartItems = Cart::where('user_id', Auth::id())->with('article')->get();
@@ -19,31 +36,20 @@ class PaymentController extends Controller
 
         $total = $cartItems->sum(fn($item) => $item->article->price * $item->quantity);
 
-        // Ottieni access token
         $response = Http::asForm()->withBasicAuth(
             config('paypal.sandbox.client_id'),
             config('paypal.sandbox.client_secret')
-        )
-            ->post('https://api-m.sandbox.paypal.com/v1/oauth2/token', [
-                'grant_type' => 'client_credentials',
-            ]);
+        )->post('https://api-m.sandbox.paypal.com/v1/oauth2/token', [
+            'grant_type' => 'client_credentials',
+        ]);
 
         if (!$response->successful()) {
-            // Log del corpo della risposta per il debug
-            \Log::error('Errore PayPal: ' . $response->body());
+            \Log::error('Errore PayPal (token): ' . $response->body());
             return redirect()->route('cart.show')->with('message', 'Errore nell\'ottenere il token di accesso.');
         }
 
-        $accessToken = $response->json()['access_token'] ?? null;
+        $accessToken = $response->json()['access_token'];
 
-        if (!$accessToken) {
-            // Log se il token non è presente
-            \Log::error('Token di accesso non trovato nella risposta: ' . $response->body());
-            return redirect()->route('cart.show')->with('message', 'Token di accesso non valido.');
-        }
-
-
-        // Crea ordine
         $order = Http::withToken($accessToken)->post('https://api-m.sandbox.paypal.com/v2/checkout/orders', [
             'intent' => 'CAPTURE',
             'purchase_units' => [[
@@ -53,45 +59,95 @@ class PaymentController extends Controller
                 ],
             ]],
             'application_context' => [
-                'return_url' => route('paypal.success'),
-                'cancel_url' => route('paypal.cancel'),
+                'return_url' => route('payment.success'),
+                'cancel_url' => route('payment.cancel'),
             ],
         ]);
 
         $orderData = $order->json();
+        $approveLink = collect($orderData['links'])->firstWhere('rel', 'approve')['href'] ?? null;
 
-        // Trova link approvazione
-        $approveLink = collect($orderData['links'])->firstWhere('rel', 'approve')['href'];
+        if (!$approveLink) {
+            \Log::error('Link di approvazione non trovato: ' . json_encode($orderData));
+            return redirect()->route('cart.show')->with('message', 'Impossibile procedere al pagamento.');
+        }
 
         return redirect()->away($approveLink);
     }
 
+    // ✅ Successo pagamento
     public function success(Request $request)
-    {
-        $token = $request->get('token');
+{
+    $token = $request->get('token');
 
-        // Ottieni nuovo access token
-        $response = Http::asForm()->withBasicAuth(config('paypal.client_id'), config('paypal.secret'))
-            ->post('https://api-m.sandbox.paypal.com/v1/oauth2/token', [
-                'grant_type' => 'client_credentials',
+    $response = Http::asForm()->withBasicAuth(
+        config('paypal.sandbox.client_id'),
+        config('paypal.sandbox.client_secret')
+    )->post('https://api-m.sandbox.paypal.com/v1/oauth2/token', [
+        'grant_type' => 'client_credentials',
+    ]);
+
+    if (!$response->successful()) {
+        \Log::error('Errore PayPal (token success): ' . $response->body());
+        return redirect()->route('cart.show')->with('message', 'Errore durante la conferma del pagamento.');
+    }
+
+    $accessToken = $response->json()['access_token'];
+
+    $capture = Http::withToken($accessToken)
+        ->post("https://api-m.sandbox.paypal.com/v2/checkout/orders/{$token}/capture");
+
+    $data = $capture->json();
+
+    // Debug temporaneo
+    \Log::info('Risposta Capture PayPal: ' . json_encode($data));
+
+    $isCompleted = false;
+
+    if (isset($data['status']) && $data['status'] === 'COMPLETED') {
+        $isCompleted = true;
+    }
+
+    // A volte PayPal mette lo status nel nested array → fallback
+    if (!$isCompleted && isset($data['purchase_units'][0]['payments']['captures'][0]['status'])) {
+        $isCompleted = $data['purchase_units'][0]['payments']['captures'][0]['status'] === 'COMPLETED';
+    }
+
+    if ($isCompleted) {
+        $user = Auth::user();
+        $order = Order::create([
+            'user_id' => $user->id,
+            'total_amount' => $this->calculateTotalAmount($user->id),
+            'status' => 'paid',
+            'payment_method' => 'paypal',
+        ]);
+
+        $cartItems = Cart::where('user_id', $user->id)->with('article')->get();
+        dd($cartItem);
+
+        foreach ($cartItems as $cartItem) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'article_id' => $cartItem->article_id,
+                'quantity' => $cartItem->quantity,
+                'price' => $cartItem->article->price,
             ]);
-
-        $accessToken = $response->json()['access_token'];
-
-        // Cattura pagamento
-        $capture = Http::withToken($accessToken)
-            ->post("https://api-m.sandbox.paypal.com/v2/checkout/orders/{$token}/capture");
-
-        $data = $capture->json();
-
-        if (($data['status'] ?? null) === 'COMPLETED') {
-            // Svuota il carrello o salva ordine
-            Cart::where('user_id', Auth::id())->delete();
-
-            return redirect()->route('cart.show')->with('message', 'Pagamento completato con successo!');
         }
 
-        return redirect()->route('cart.show')->with('message', 'Errore durante il pagamento.');
+        Cart::where('user_id', $user->id)->delete();
+
+        return redirect()->route('orders.index')->with('message', 'Pagamento completato con successo!');
+    }
+
+    \Log::error('Pagamento non completato: ' . json_encode($data));
+    return redirect()->route('cart.show')->with('message', 'Errore durante il pagamento.');
+}
+
+
+    private function calculateTotalAmount($userId)
+    {
+        $cartItems = Cart::where('user_id', $userId)->with('article')->get();
+        return $cartItems->sum(fn($item) => $item->article->price * $item->quantity);
     }
 
     public function cancel()

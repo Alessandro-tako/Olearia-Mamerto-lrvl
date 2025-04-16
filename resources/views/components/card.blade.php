@@ -32,12 +32,14 @@
                     Vai al dettaglio
                 </a>
                 {{-- Pulsante Aggiungi al carrello --}}
+                @if (!Auth::check() && (Auth::user()->id === $article->user_id || Auth::user()->is_admin))
                 <form class="col-12 col-md-6" action="{{ route('cart.add', $article->id) }}" method="POST">
                     @csrf
                     <button type="submit" class="btn-custom mt-3 px-4">
                         Aggiungi al carrello
                     </button>
                 </form>
+                @endif
             </div>
         </div>
         {{ $slot }}

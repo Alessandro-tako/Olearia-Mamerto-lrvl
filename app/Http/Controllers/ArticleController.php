@@ -59,8 +59,9 @@ class ArticleController extends Controller implements HasMiddleware
     {
         $user = auth()->user(); // Recupera l'utente loggato
         $shippingAddress = $user->shippingAddress; // Recupera l'indirizzo di spedizione dell'utente
+        $orders = $user->orders; // Recupera gli ordini dell'utente (se hai una relazione "orders" definita sul modello User)
     
-        return view('user.profile', compact('user', 'shippingAddress'));
+        return view('user.profile', compact('user', 'shippingAddress', 'orders'));
     }
     // elimina articolo
     public function destroy(Article $article)

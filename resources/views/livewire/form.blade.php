@@ -60,7 +60,7 @@
 
         <!-- Upload immagini -->
         <div class="mb-3">
-            <label for="image" class="btn btn-success rounded-pill">Carica le immagini del prodotto:</label>
+            <label for="image" class="btn-custom">Carica le immagini del prodotto:</label>
             <input type="file" id="image" class="form-control d-none" wire:model="temporary_images" multiple>
             @error('temporary_images.*') <span class="text-danger">{{ $message }}</span> @enderror
         </div>

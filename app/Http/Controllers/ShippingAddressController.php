@@ -37,7 +37,7 @@ class ShippingAddressController extends Controller
         );
     
         // Reindirizza al pagamento dopo l'aggiornamento dell'indirizzo
-        return redirect()->route('payment.form')->with('success', 'Indirizzo aggiornato correttamente.');
+        return redirect()->route('user.profile')->with('success', 'Indirizzo aggiornato correttamente.');
     }
     
 

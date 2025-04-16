@@ -49,7 +49,7 @@
                                 @enderror
                             </div>
                             <div id="create-user" class="mb-2 fw-semibold">Hai già un account?, <a class="card-price fs-5 text-decoration-none custom-link1" href="{{ route('login') }}">Accedi</a></div>
-                            <button type="submit" class="btn btn-success">Iscriviti</button>
+                            <button type="submit" class="btn btn-custom">Iscriviti</button>
                         </form>
                     </div>
                 </div>

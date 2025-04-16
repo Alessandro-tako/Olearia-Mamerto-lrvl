@@ -29,7 +29,7 @@
                                 @enderror
                             </div>
                             <div id="create-user" class="mb-2 fw-semibold">Non hai un profilo?<a class="card-price fs-5 text-decoration-none custom-link1" href="{{ route('register') }}"> Registrati</a></div>
-                            <button type="submit" class="btn btn-success">Invio</button>
+                            <button type="submit" class="btn btn-custom">Accedi</button>
                         </form>
                     </div>
                 </div>

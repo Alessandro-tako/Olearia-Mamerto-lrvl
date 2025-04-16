@@ -1,7 +1,7 @@
 <x-layout>
     <div class="container py-5 text-light">
         <div class="row">
-            <h2 class="secondary-title col-12 mb-4">
+            <h2 class="secondary-title col-12 mb-4 text-center">
                 <span class="mainLetterTitle">I</span>l tuo carrello
             </h2>
         </div>
@@ -45,7 +45,7 @@
                 <h5 class="fw-bold text-success">
                     Totale: {{ number_format($cartItems->sum(fn($item) => $item->article->price * $item->quantity), 2) }} €
                 </h5>
-                <a href="{{ route('paypal.checkout') }}" class="btn-custom mt-2 ">Procedi al pagamento</a>
+                <a href="{{ route('checkout.summary') }}" class="btn-custom mt-2 ">Procedi al pagamento</a>
             </div>
         @else
             <div class="alert alert-dark mt-4 text-center" role="alert">

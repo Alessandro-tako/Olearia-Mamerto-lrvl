@@ -47,20 +47,26 @@
                         </a>
                         <ul class="dropdown-menu">
                             @if (Auth::check() && Auth::user()->is_admin)
-                                <li><a href="{{ route('article.create') }}" class="dropdown-item">Inserisci un prodotto</a></li>
-                                <li><a href="{{ route('admin.profile') }}" class="dropdown-item drop-menu">Vai al profilo Amministratore</a></li>
+                                <li><a href="{{ route('article.create') }}" class="dropdown-item">Inserisci un
+                                        prodotto</a></li>
+                                <li><a href="{{ route('admin.profile') }}" class="dropdown-item drop-menu">Vai al
+                                        profilo Amministratore</a></li>
                                 <li>
                                     <a class="dropdown-item drop-menu" href="{{ route('revision.index') }}">
                                         Articoli da Revisionare
                                         @if (\App\Models\Article::ToBeRevisedCount() > 0)
-                                            <span class="badge rounded-circle bg-success text-white">
+                                            <span class="badge custom-badge">
                                                 {{ \App\Models\Article::toBeRevisedCount() }}
                                             </span>
                                         @endif
                                     </a>
                                 </li>
+                                <li>
+                                    <a class="dropdown-item drop-menu" href="{{route('admin.orders')}}">Gestione degli ordini</a>
+                                </li>
                             @else
-                                <li><a href="{{ route('user.profile') }}" class="dropdown-item drop-menu">Vai al profilo</a></li>
+                                <li><a href="{{ route('user.profile') }}" class="dropdown-item drop-menu">Vai al
+                                        profilo</a></li>
                             @endif
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
@@ -71,16 +77,19 @@
                 @endif
 
                 {{-- Carrello --}}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('cart.show') }}">
-                        <i class="bi bi-cart"></i>
-                        @if (\App\Models\Cart::itemCount() > 0)
-                            <span class="badge rounded-circle bg-success text-white">
-                                {{ \App\Models\Cart::itemCount() }}
-                            </span>
-                        @endif
-                    </a>
-                </li>
+                {{-- Carrello, visibile solo agli utenti non admin --}}
+                @if (Auth::check() && !Auth::user()->is_admin)
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('cart.show') }}">
+                            <i class="bi bi-cart"></i>
+                            @if (\App\Models\Cart::itemCount() > 0)
+                                <span class="badge custom-badge">
+                                    {{ \App\Models\Cart::itemCount() }}
+                                </span>
+                            @endif
+                        </a>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>

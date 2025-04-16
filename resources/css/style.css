@@ -1,0 +1,345 @@
+:root {
+    --primary-color: #228b22;
+    --primary-dark-color: #02ab48;
+    --primary-light-color: #55b605;
+    --accent-color: #0e2e50;
+
+    --white: #EFFDF5;
+    --neutral: #666565;
+}
+
+.bg-primary-col {
+    color: var(--primary-color);
+}
+
+body {
+    background-color: black;
+    color: white;
+    margin-top: 200px;
+}
+
+.title-container {
+    text-align: center;
+}
+
+h2{
+    margin: 50px;
+}
+
+p{
+    font-size: large;
+}
+
+.article-title{
+    color: green;
+    font-weight: bold;
+}
+
+
+
+/* navbar */
+
+.nav-cus {
+    margin: 5vh 10vw;
+    border-radius: 10px;
+    border: 2px solid var(--primary-light-color);
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.navbar-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.custom-link1 {
+
+    color: green;
+}
+
+.custom-link2 {
+
+    color: white;
+}
+
+.custom-link3 {
+    color: red;
+}
+/* bottone custom */
+.btn-custom {
+    background-color: #228b22; /* Verde personalizzato */
+    color: white;
+    border-radius: 50px; /* Effetto pill */
+    padding: 10px 20px; /* Regola la spaziatura interna */
+    font-size: 16px; /* Imposta una dimensione del testo */
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+    border: none;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-custom:hover {
+    background-color: #157347; /* Colore verde più scuro al passaggio del mouse */
+    transform: scale(1.05); /* Leggera animazione di ingrandimento */
+}
+
+.btn-custom:focus {
+    outline: none; /* Rimuove il contorno durante il focus */
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25); /* Effetto focus */
+}
+
+.custom-badge {
+    background-color: #228b22 !important; /* verde personalizzato */
+    color: #fff !important;               /* testo bianco */
+    border-radius: 50%;                   /* cerchio */
+    padding: 0.5em 0.75em;
+    font-weight: bold;
+    font-size: 0.9em;
+    display: inline-block;
+    text-align: center;
+    min-width: 2em;
+}
+
+
+
+
+
+
+/* header */
+.main-title-box {
+
+    color: white;
+    text-align: center;
+    margin-top: 200px;
+    background-color: black;
+    width: 100%;
+}
+
+
+.main-title {
+    font-size: calc(30px + 8vw);
+    letter-spacing: 2vw;
+    text-shadow: 5px 5px 20px var(--primary-light-color);
+
+
+}
+
+.secondary-title {
+    font-size: calc(30px + 4vw);
+    text-shadow: 5px 5px 20px var(--primary-light-color);
+}
+
+.main-title-font {
+    font-family: "Fleur De Leah", cursive;
+
+}
+
+.mainLetterTitle {
+    color: var(--primary-color);
+}
+
+/* social */
+
+.button-fb {
+    display: inline-block;
+    padding: 10px 30px;
+    text-decoration: none;
+    color: var(--primary-dark-color);
+    position: relative;
+    transition: 1s;
+    font-size: 40px;
+}
+
+.button-fb::after {
+    position: absolute;
+    content: "";
+    top: -4px;
+    left: -1px;
+    height: 100%;
+    width: 10px;
+    border-left: 4px solid var(--primary-dark-color);
+    border-top: 4px solid var(--primary-dark-color);
+    border-bottom: 4px solid var(--primary-dark-color);
+    transition: 1s;
+}
+
+.button-fb::before {
+    position: absolute;
+    content: "";
+    top: -4px;
+    right: -1px;
+    height: 100%;
+    width: 10px;
+    border-right: 4px solid var(--primary-dark-color);
+    border-top: 4px solid var(--primary-dark-color);
+    border-bottom: 4px solid var(--primary-dark-color);
+    transition: 1s;
+}
+
+.button-fb:hover::after,
+.button-fb:hover::before {
+    width: 100%;
+}
+
+.button-tt {
+    display: inline-block;
+    padding: 10px 30px;
+    text-decoration: none;
+    color: white;
+    position: relative;
+    transition: 1s;
+    font-size: 40px;
+}
+
+.button-tt::after {
+    position: absolute;
+    content: "";
+    top: -4px;
+    left: -1px;
+    height: 100%;
+    width: 10px;
+    border-left: 4px solid white;
+    border-top: 4px solid white;
+    border-bottom: 4px solid white;
+    transition: 1s;
+}
+
+.button-tt::before {
+    position: absolute;
+    content: "";
+    top: -4px;
+    right: -1px;
+    height: 100%;
+    width: 10px;
+    border-right: 4px solid white;
+    border-top: 4px solid white;
+    border-bottom: 4px solid white;
+    transition: 1s;
+}
+
+.button-tt:hover::after,
+.button-tt:hover::before {
+    width: 100%;
+}
+
+.button-ig {
+    display: inline-block;
+    padding: 10px 30px;
+    text-decoration: none;
+    color: red;
+    position: relative;
+    transition: 1s;
+    font-size: 40px;
+}
+
+.button-ig::after {
+    position: absolute;
+    content: "";
+    top: -4px;
+    left: -1px;
+    height: 100%;
+    width: 10px;
+    border-left: 4px solid red;
+    border-top: 4px solid red;
+    border-bottom: 4px solid red;
+    transition: 1s;
+}
+
+.button-ig::before {
+    position: absolute;
+    content: "";
+    top: -4px;
+    right: -1px;
+    height: 100%;
+    width: 10px;
+    border-right: 4px solid red;
+    border-top: 4px solid red;
+    border-bottom: 4px solid red;
+    transition: 1s;
+}
+
+.button-ig:hover::after,
+.button-ig:hover::before {
+    width: 100%;
+}
+
+/* icona whatsapp */
+
+.whatsapp-icon {
+    font-size: 40px;
+    /* Imposta la dimensione dell'icona */
+    color: #25D366;
+    /* Colore di WhatsApp */
+    text-decoration: none;
+    /* Rimuovi la sottolineatura del link */
+    display: inline-block;
+    /* Permette di fare clic facilmente sull'icona */
+    transition: transform 0.3s;
+    /* Aggiunge un effetto di transizione al clic */
+    position: fixed;
+    bottom: 50px;
+    left: 50px;
+}
+
+.whatsapp-icon:hover {
+    transform: scale(1.1);
+    /* Effetto hover per ingrandire l'icona quando si passa sopra */
+}
+
+/* contatti */
+
+#contacts{
+    margin-top: 200px;
+}
+
+#we-are{
+    margin-top: 200px;
+}
+
+#gallery{
+    margin-top: 200px;
+}
+
+/* stile della paginazione articoli */
+.pagination .page-item {
+    margin: 0 4px; /* spazio tra i bottoni */
+}
+
+.pagination .page-link {
+    color: #198754;
+    border: 1px solid #198754;
+    border-radius: 10px; /* angoli tondeggianti */
+    padding: 8px 12px;
+    transition: all 0.3s ease;
+}
+
+.pagination .page-link:hover {
+    background-color: #198754;
+    color:black;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #198754;
+    border-color: #198754;
+    color: black;
+    font-weight: bold;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* stile delle card */
+.custom-card {
+    background: wite;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(0, 255, 128, 0.15);
+    box-shadow: 0 0 10px rgba(0, 255, 128, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.custom-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 0 12px rgba(0, 255, 128, 0.3), 0 0 25px rgba(0, 255, 128, 0.2);
+}

@@ -26,19 +26,45 @@
         </p>
 
         <div class="container">
-            <div class="row justify-contyernt-center align-items-center">
+            <div class="row justify-content-evenly align-items-center">
                 <a href="{{ route('article.show', ['article' => $article->id]) }}"
-                    class="btn btn-outline-success mt-3 px-4 rounded-pill col-12 col-md-6">
+                    class="btn btn-outline-success mt-3 px-4 rounded-pill col-12 col-md-6 ">
                     Vai al dettaglio
                 </a>
-                {{-- Pulsante Aggiungi al carrello --}}
-                @if (!Auth::check() && (Auth::user()->id === $article->user_id || Auth::user()->is_admin))
-                <form class="col-12 col-md-6" action="{{ route('cart.add', $article->id) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn-custom mt-3 px-4">
-                        Aggiungi al carrello
-                    </button>
-                </form>
+
+                {{-- Se l'utente è loggato o è admin, mostriamo anche il tasto "Modifica" e "Elimina" --}}
+                @if ($user && ($user->is_admin || $user->id === $article->user_id))
+                <div class="row justify-content-center mt-3">
+                    <!-- Modifica -->
+                    <div class="col-6">
+                        <a href="{{ route('article.edit', $article->id) }}" class="btn btn-secondary rounded-pill w-100">
+                            <i class="bi bi-pencil-fill"></i> Modifica
+                        </a>
+                    </div>
+            
+                    <!-- Elimina -->
+                    <div class="col-6">
+                        <form action="{{ route('articles.destroy', $article) }}" method="POST" onsubmit="return confirm('Sicuro di voler eliminare?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger rounded-pill w-100">
+                                <i class="bi bi-trash-fill"></i> Elimina
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                @endif
+
+                {{-- Mostra sempre il tasto "Aggiungi al carrello" se l'utente non è admin --}}
+                @if (!$user || !$user->is_admin)
+                    <div class="col-12 col-md-6 mt-3">
+                        <form action="{{ route('cart.add', $article->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-custom w-100">
+                                Aggiungi al  <i class="bi bi-cart"></i>
+                            </button>
+                        </form>
+                    </div>
                 @endif
             </div>
         </div>

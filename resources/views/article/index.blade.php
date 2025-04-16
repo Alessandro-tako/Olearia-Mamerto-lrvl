@@ -8,7 +8,7 @@
         <div class="row height-custom justify-content-center align-items-center py-5">
             @forelse ($articles as $article)
                 <div class="col-11 col-lg-4 col-xl-4 col-md-6 g-4">
-                    <x-card :article="$article" />
+                    <x-card :article="$article" :user="$user"/>
                 </div>
             @empty
                 <div class="col-1">

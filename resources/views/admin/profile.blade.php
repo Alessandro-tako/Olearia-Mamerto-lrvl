@@ -33,26 +33,7 @@
 
             @forelse ($articles as $article)
                 <div class="col-12 col-md-4 mb-4">
-                    <x-card :article="$article">
-                        @if (Auth::check() && (Auth::user()->id === $article->user_id || Auth::user()->is_admin))
-                            <div class="row justify-content-center mt-3">
-                                <div class="col-6">
-                                    <a href="{{ route('article.edit', $article->id) }}"
-                                        class="btn btn-secondary rounded-pill w-100"><i class="bi bi-pencil-fill"></i>
-                                        Modifica</a>
-                                </div>
-                                <div class="col-6">
-                                    <form action="{{ route('articles.destroy', $article) }}" method="POST"
-                                        onsubmit="return confirm('Sicuro di voler eliminare?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger rounded-pill w-100"><i class="bi bi-trash-fill"></i>
-                                            Elimina</button>
-                                    </form>
-                                </div>
-                            </div>
-                        @endif
-                    </x-card>
+                    <x-card :article="$article" :user="$user"></x-card>
                 </div>
             @empty
                 <div class="col-12 text-center">

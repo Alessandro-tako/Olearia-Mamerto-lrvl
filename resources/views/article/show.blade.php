@@ -49,11 +49,33 @@
                     </h4>
                     <h5>Descrizione:</h5>
                     <p>{{ $article->description }}</p>
-                    <!-- Aggiungi il pulsante per il carrello -->
-            <form action="{{ route('cart.add', $article->id) }}" method="POST">
-                @csrf
-                <button type="submit" class="btn btn-success rounded-pill">Aggiungi al carrello</button>
-            </form>
+
+                    <!-- Pulsante Modifica e Elimina per admin o proprietario -->
+                    @if (Auth::check() && (Auth::user()->id === $article->user_id || Auth::user()->is_admin))
+                        <div class="d-flex flex-column flex-md-row justify-content-between mt-3">
+                            <!-- Tasto Elimina -->
+                            <form action="{{ route('articles.destroy', $article) }}" method="POST"
+                                onsubmit="return confirm('Sei sicuro di voler eliminare questo articolo?');"
+                                class="col-12 col-md-5">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-lg ">
+                                    <i class="bi bi-trash-fill"></i> Elimina
+                                </button>
+                            </form>
+
+                            <!-- Tasto Modifica -->
+                            <a href="{{ route('article.edit', $article->id) }}"
+                                class="btn btn-secondary btn-lg col-12 col-md-5 mt-3 mt-md-0">
+                                <i class="bi bi-pencil-fill"></i> Modifica
+                            </a>
+                        </div>
+                    @else
+                        <form action="{{ route('cart.add', $article->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-custom">Aggiungi al carrello <i class="bi bi-cart"></i></button>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>

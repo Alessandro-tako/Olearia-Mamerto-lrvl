@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use App\Models\ShippingAddress;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -12,9 +13,13 @@ class OrderController extends Controller
     // Mostra gli ordini dell'utente
     public function userOrders()
     {
-        $orders = Order::where('user_id', Auth::id())->get();
-        return view('user.profile', compact('orders'));
+        $user = Auth::user();  // Recupera l'utente autenticato
+        $shippingAddress = ShippingAddress::where('user_id', $user->id)->latest()->first();
+        $orders = Order::where('user_id', $user->id)->get();  // Recupera gli ordini dell'utente
+        
+        return view('user.profile', compact('user', 'shippingAddress', 'orders'));  // Passa anche gli ordini
     }
+    
 
     // Mostra tutti gli ordini per l'amministratore
     public function adminOrders()
@@ -24,15 +29,18 @@ class OrderController extends Controller
     }
 
     // Modifica lo stato di un ordine (solo per admin)
-    public function updateStatus(Order $order, Request $request)
+    public function updateStatus(Request $request, Order $order)
     {
-        $request->validate([
-            'status' => 'required|in:pending,paid,shipped,cancelled',
+        // Validazione dello stato
+        $validated = $request->validate([
+            'status' => 'required|in:Pagato e in attesa,Confermato,Spedito,cancellato',
         ]);
-
-        $order->status = $request->status;
+    
+        // Aggiorna lo stato dell'ordine
+        $order->status = $request->input('status');
         $order->save();
-
-        return redirect()->route('admin.orders')->with('message', 'Stato ordine aggiornato con successo!');
+    
+        return redirect()->back()->with('success', 'Stato aggiornato con successo!');
     }
+    
 }

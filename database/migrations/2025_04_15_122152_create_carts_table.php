@@ -20,7 +20,7 @@ class CreateCartsTable extends Migration
             $table->integer('quantity')->default(1);  // La quantità dell'articolo nel carrello
             $table->timestamps();
         });
-    }    
+    }   
 
     /**
      * Reverti le migrazioni.

@@ -11,10 +11,11 @@
                     <x-card :article="$article" :user="$user"/>
                 </div>
             @empty
-                <div class="col-1">
-                    <h3 class="text-center">
-                        Nessun prodotto presente
+                <div class="col-12">
+                    <h3 class="text-center display-6 fst-italic fw-light ">
+                        Ancora nessun prodotto presente nel sito
                     </h3>
+                    
                 </div>
             @endforelse
         </div>

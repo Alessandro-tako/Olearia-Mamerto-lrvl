@@ -35,6 +35,9 @@ p{
     font-weight: bold;
 }
 
+.primary-text{
+    color: var(--primary-color);
+}
 
 
 /* navbar */
@@ -68,7 +71,7 @@ p{
 }
 /* bottone custom */
 .btn-custom {
-    background-color: #228b22; /* Verde personalizzato */
+    background-color: var(--primary-color); /* Verde personalizzato */
     color: white;
     border-radius: 50px; /* Effetto pill */
     padding: 10px 20px; /* Regola la spaziatura interna */
@@ -290,18 +293,6 @@ p{
 }
 
 /* contatti */
-
-#contacts{
-    margin-top: 200px;
-}
-
-#we-are{
-    margin-top: 200px;
-}
-
-#gallery{
-    margin-top: 200px;
-}
 
 /* stile della paginazione articoli */
 .pagination .page-item {

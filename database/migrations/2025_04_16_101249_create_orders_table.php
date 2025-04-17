@@ -12,7 +12,8 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->decimal('total_amount', 8, 2);  // Importo totale dell'ordine
-            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
+            // Impostiamo 'paid' come valore predefinito, e aggiungiamo 'confirmed' e 'shipped'
+            $table->enum('status', ['Pagato e in attesa', 'Confermato', 'Spedito', 'cancellato'])->default('Pagato e in attesa');
             $table->timestamps();
         });
     }

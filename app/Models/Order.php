@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\OrderItem;
+use App\Models\ShippingAddress;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -30,4 +32,17 @@ class Order extends Model
 
         return $total;
     }
+
+    public function shippingAddress()
+    {
+        return $this->user->shippingAddress;
+    }
+    
+
+    public static function newOrdersCount()
+    {
+        return self::where('status', 'Pagato e in attesa')->count();
+    }
+
+
 }

@@ -84,7 +84,7 @@ class PaymentController extends Controller
 
         if (!$approveLink) {
             Log::error('❌ Link di approvazione non trovato: ' . json_encode($orderData));
-            return redirect()->route('cart.show')->with('message', 'Impossibile procedere al pagamento.');
+            return redirect()->route('shipping.update')->with('message', 'Impossibile procedere al pagamento inserisci il tuo indirizzo.');
         }
 
         return redirect()->away($approveLink);

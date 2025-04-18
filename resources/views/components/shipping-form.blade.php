@@ -32,7 +32,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="address" class="form-label">Indirizzo</label>
+                        <label for="address" class="form-label">Indirizzo e n. civico</label>
                         <input type="text" class="form-control" id="address" name="address" value="{{ old('address', $address->address) }}" required>
                         @error('address') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>

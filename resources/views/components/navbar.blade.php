@@ -62,8 +62,16 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item drop-menu" href="{{route('admin.orders')}}">Gestione degli ordini</a>
+                                    <a class="dropdown-item drop-menu" href="{{ route('admin.orders') }}">
+                                        Gestione degli ordini
+                                        @if (\App\Models\Order::newOrdersCount() > 0)
+                                            <span class="badge custom-badge">
+                                                {{ \App\Models\Order::newOrdersCount() }}
+                                            </span>
+                                        @endif
+                                    </a>
                                 </li>
+                                
                             @else
                                 <li><a href="{{ route('user.profile') }}" class="dropdown-item drop-menu">Vai al
                                         profilo</a></li>

@@ -1,35 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- banner cookie -->
-    {{-- <script type="text/javascript">
-        var _iub = _iub || [];
-        _iub.csConfiguration = { "siteId": 3881849, "cookiePolicyId": 18156025, "lang": "it", "storage": { "useSiteId": true } };
-    </script>
-    <script type="text/javascript" src="https://cs.iubenda.com/autoblocking/3881849.js"></script>
-    <script type="text/javascript" src="//cdn.iubenda.com/cs/gpp/stub.js"></script>
-    <script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script> --}}
-    {{-- favicon --}}
+
+    <!-- Meta Description -->
+    <meta name="description" content="Olearia Mamerto è un'azienda agricola che produce olio extravergine di oliva di alta qualità, coltivato in Calabria con passione e tecniche innovative.">
+
+    <!-- Open Graph meta tags for social sharing -->
+    <meta property="og:title" content="Olearia Mamerto">
+    <meta property="og:description" content="Olearia Mamerto produce olio extravergine di oliva di qualità superiore, disponibile online.">
+    <meta property="og:image" content="{{ asset('images/fotoprincipale.bmp') }}">
+    <meta property="og:url" content="{{ url('/') }}">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter meta tags for better sharing on Twitter -->
+    <meta name="twitter:title" content="Olearia Mamerto">
+    <meta name="twitter:description" content="Olearia Mamerto produce olio extravergine di oliva di qualità superiore.">
+    <meta name="twitter:image" content="{{ asset('images/fotoprincipale.bmp') }}">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.png') }}">
-    <!-- bootstrap -->
+
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- bootstrap Icons -->
+
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- google Fonts -->
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fleur+De+Leah&display=swap" rel="stylesheet">
+
+    <!-- Vite for custom styles and scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <title>Olearia Mamerto</title>
 </head>
 
 <body>
     <x-navbar></x-navbar>
+
+    <!-- Success message -->
     @if (session('message'))
         <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)"
             class="alert alert-success alert-dismissible fade show" role="alert">
@@ -38,12 +55,24 @@
         </div>
     @endif
 
+    <!-- Cookie Banner (Temporaneo) -->
+    {{-- <script type="text/javascript">
+        var _iub = _iub || [];
+        _iub.csConfiguration = { "siteId": 3881849, "cookiePolicyId": 18156025, "lang": "it", "storage": { "useSiteId": true } };
+    </script>
+    <script type="text/javascript" src="https://cs.iubenda.com/autoblocking/3881849.js"></script>
+    <script type="text/javascript" src="//cdn.iubenda.com/cs/gpp/stub.js"></script>
+    <script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script> --}}
+
     {{ $slot }}
-    <a href="https://wa.me/3382017840" class="whatsapp-icon" target="_blank">
+
+    <!-- WhatsApp Icon -->
+    <a href="https://wa.me/3382017840" class="whatsapp-icon" target="_blank" aria-label="Contattaci su WhatsApp">
         <i class="bi bi-whatsapp"></i>
     </a>
+
+    <!-- Footer -->
     <x-footer></x-footer>
-    {{-- <script src="//unpkg.com/alpinejs" defer></script> --}}
 
 </body>
 

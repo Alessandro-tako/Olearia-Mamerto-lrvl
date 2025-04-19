@@ -19,3 +19,9 @@
         </div>
     </section>
 </x-email-layout>
+<style>
+    body {
+        background-color: #fff !important;
+        color: #333;
+    }
+</style>

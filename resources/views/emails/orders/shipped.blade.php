@@ -23,6 +23,19 @@
 
                         <p>Se hai domande o problemi con la spedizione, non esitare a contattarci.</p>
 
+                        <p><strong>Ci farebbe piacere sentire la tua opinione!</strong></p>
+                        <p>Se ti è piaciuto il nostro servizio, ti invitiamo a lasciare una recensione su Google. Questo aiuta altri clienti a trovare il nostro servizio!</p>
+                        
+                        <div class="star-rating" style="font-size: 2rem; color: #ffcc00;">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+
+                        <p><a href="https://www.google.com/search?sca_esv=70d7635d7621967e&sxsrf=AHTn8zohsHYwhdgo2LGwDivUTKaEzksV2Q:1745082902955&si=APYL9bs7Hg2KMLB-4tSoTdxuOx8BdRvHbByC_AuVpNyh0x2KzUPFF1wM6aV8XI5x0hZuMaHjPHL_FIfArP7KURtQbMB6REbc6vyY7NLyr4R4VJrAkJYfmuWKVwHRyzXZfX5CQMZjeBsV2R56bvbpDRiJFJrVUCB91A%3D%3D&q=OLEARIA+MAMERTO+Recensioni&sa=X&ved=2ahUKEwjW16K0zOSMAxV2h_0HHSozIbIQ0bkNegQIJhAE&biw=1718&bih=1270&dpr=1" target="_blank" class="btn btn-success">Lascia una recensione su Google</a></p>
+
                         <p>Grazie,</p>
                         <p>{{ config('app.name') }}</p>
                     </div>

@@ -63,7 +63,7 @@
 
                     <!-- Upload immagini -->
                     <div class="mb-3">
-                        <label for="imageInput" class="btn btn-success rounded-pill">Carica Immagini</label>
+                        <label for="imageInput" class="btn btn-custom">Carica Immagini</label>
                         <input type="file" class="form-control d-none" name="images[]" id="imageInput" multiple>
                         @error('images.*') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
@@ -89,7 +89,7 @@
                     <input type="hidden" name="images_to_remove" id="imagesToRemove">
 
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-success">
+                        <button type="submit" class="btn btn-custom">
                             Aggiorna Articolo
                         </button>
                     </div>

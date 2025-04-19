@@ -13,6 +13,8 @@ use App\Http\Controllers\ShippingAddressController;
 
 Route::get('/', [PageController::class, 'homepage'])->name('homepage');
 Route::get('/contatti', [PageController::class, 'contacts'])->name('contacts');
+Route::get('/contatti/form', [PageController::class, 'showForm'])->name('contact.form');
+Route::post('/contatti/form', [PageController::class, 'submitForm'])->name('contact.submit');
 Route::get('/chi-siamo', [PageController::class, 'weAre'])->name('chi-siamo');
 Route::get('/galleria', [PageController::class, 'gallery'])->name('galleria');
 

@@ -1,37 +1,17 @@
 <x-layout>
-    <header class="bg-dark text-white text-center py-3">
-        <h1><i class="bi bi-envelope textColor fs-1"></i> Contattaci</h1>
-    </header>
-
-    <x-success-message />
-
-    <main class="container mt-4">
-        <div class="row justify-content-center align-items-center py-4">
-            <div class="col-12 col-md-6">
-                <div class="p-4 bg-dark text-white rounded shadow text-center">
-                    <h2 class="fw-bold mb-3">Modulo di Contatto</h2>
-                    <p class="mb-0">Hai domande o richieste? Compila il modulo qui sotto e ti risponderemo il prima possibile!</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Messaggi di errore -->
-        @if (session()->has('errorMessage'))
-            <div class="row justify-content-center mt-3">
-                <div class="col-12 col-md-8">
-                    <div class="alert alert-danger text-center shadow rounded">
-                        {{ session('errorMessage') }}
-                    </div>
-                </div>
-            </div>
+    <section class="container my-5">
+        <h2 class="text-center">Contattaci</h2>
+        
+        <!-- Mostra il messaggio di successo se presente -->
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
         @endif
-
-        <!-- Form di contatto -->
-        <div class="row justify-content-center text-center mt-5">
-            <div class="col-12 col-md-8">
-                <form action="{{ route('contact.submit') }}" method="POST">
+        
+        <div class="container">
+            <div class="row justify-content-evenly">
+                <form class="col-12 col-md-6" action="{{ route('contact.submit') }}" method="POST">
                     @csrf
-
+        
                     <div class="mb-3">
                         <label for="name" class="form-label">Nome</label>
                         <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
@@ -39,7 +19,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-
+        
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required>
@@ -47,7 +27,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-
+        
                     <div class="mb-3">
                         <label for="message" class="form-label">Messaggio</label>
                         <textarea class="form-control @error('message') is-invalid @enderror" id="message" name="message" rows="4" required>{{ old('message') }}</textarea>
@@ -55,10 +35,10 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-
-                    <button type="submit" class="btn btn-primary">Invia</button>
+        
+                    <button type="submit" class="btn btn-custom">Invia</button>
                 </form>
             </div>
         </div>
-    </main>
+    </section>
 </x-layout>

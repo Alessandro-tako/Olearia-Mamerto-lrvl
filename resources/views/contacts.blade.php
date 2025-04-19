@@ -23,23 +23,33 @@
             </div>
 
             <div class="row justify-content-around g-3">
-                <!-- Link a Facebook con attributo alt per SEO -->
+                <!-- Link a Facebook -->
                 <a href="https://www.facebook.com/Oleariamamerto/?locale=it_IT"
                     class="button-fb col-10 col-md-3 text-center" target="_blank" rel="noopener noreferrer" aria-label="Segui Olearia Mamerto su Facebook">
                     <i class="bi bi-facebook"></i>
                 </a>
 
-                <!-- Link a TikTok con attributo alt per SEO -->
+                <!-- Link a TikTok -->
                 <a href="https://www.tiktok.com/@oleariamamerto"
                     class="button-tt col-10 col-md-3 text-center" target="_blank" rel="noopener noreferrer" aria-label="Segui Olearia Mamerto su TikTok">
                     <i class="bi bi-tiktok"></i>
                 </a>
 
-                <!-- Link a Instagram con attributo alt per SEO -->
+                <!-- Link a Instagram -->
                 <a href="https://www.instagram.com/oleariamamerto/?locale=us&hl=am-et"
                     class="button-ig col-10 col-md-3 text-center" target="_blank" rel="noopener noreferrer" aria-label="Segui Olearia Mamerto su Instagram">
                     <i class="bi bi-instagram"></i>
                 </a>
+            </div>
+
+            <!-- Frase aggiuntiva -->
+            <div class="col-12 mt-4 text-center">
+                <p>Per inviarci un messaggio o se hai bisogno di assistenza, non esitare a contattarci!</p>
+            </div>
+
+            <!-- Bottone per accedere al modulo di contatto -->
+            <div class="col-12 mt-3 text-center">
+                <a href="{{ route('contact.form') }}" class="btn btn-custom">Contattaci</a>
             </div>
 
             <!-- Google Maps Embed -->

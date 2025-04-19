@@ -41,10 +41,17 @@
                     </li>
                 @else
                     <li class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <i class="bi bi-person-circle"></i> Ciao {{ Auth::user()->name }}
-                        </a>
+                        @if (!Auth::user()->is_admin)
+                            <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <i class="bi bi-person-circle"></i> Ciao {{ Auth::user()->name }}
+                            </a>
+                        @else
+                            <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <i class="bi bi-person-circle"></i> Admin {{ Auth::user()->name }}
+                            </a>
+                        @endif
                         <ul class="dropdown-menu">
                             @if (Auth::check() && Auth::user()->is_admin)
                                 <li><a href="{{ route('article.create') }}" class="dropdown-item">Inserisci un
@@ -71,7 +78,6 @@
                                         @endif
                                     </a>
                                 </li>
-                                
                             @else
                                 <li><a href="{{ route('user.profile') }}" class="dropdown-item drop-menu">Vai al
                                         profilo</a></li>

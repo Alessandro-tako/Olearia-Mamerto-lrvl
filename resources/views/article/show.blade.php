@@ -50,6 +50,27 @@
                     <h5>Descrizione:</h5>
                     <p>{{ $article->description }}</p>
 
+                    <!-- Se l'utente è un admin, mostra più dettagli dell'articolo -->
+                    @if (Auth::check() && Auth::user()->is_admin)
+                        <div class="mt-3">
+                            @if ($article->stock !== null)
+                                <h5>Quantità in stock: {{ $article->stock }}</h5>
+                            @endif
+
+                            @if ($article->published_at !== null)
+                                <h5>Data di pubblicazione: {{ $article->published_at->format('d/m/Y') }}</h5>
+                            @endif
+
+                            @if ($article->created_at !== null)
+                                <h5>Data di creazione: {{ $article->created_at->format('d/m/Y H:i') }}</h5>
+                            @endif
+
+                            @if ($article->updated_at !== null)
+                                <h5>Ultimo aggiornamento: {{ $article->updated_at->format('d/m/Y H:i') }}</h5>
+                            @endif
+                        </div>
+                    @endif
+
                     <!-- Pulsante Modifica e Elimina per admin o proprietario -->
                     @if (Auth::check() && (Auth::user()->id === $article->user_id || Auth::user()->is_admin))
                         <div class="d-flex flex-column flex-md-row justify-content-between mt-3">

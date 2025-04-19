@@ -4,10 +4,7 @@ namespace App\Mail;
 
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 class OrderConfirmedMail extends Mailable
@@ -23,53 +20,21 @@ class OrderConfirmedMail extends Mailable
      */
     public function __construct(Order $order)
     {
-        $this->order = $order;  // Salva l'oggetto ordine
+        $this->order = $order;
     }
 
     /**
-     * Imposta l'email.
+     * Costruisci il messaggio email.
      */
     public function build()
     {
-        if ($this->order->user) {
-            return $this->to($this->order->user->email)
-                        ->subject('Il tuo ordine è confermato!')
-                        ->view('emails.order_confirmed')
-                        ->with(['order' => $this->order]);
-        } else {
-            // Gestisci il caso in cui l'utente non esiste
+        if (!$this->order->user) {
             throw new \Exception("L'ordine non è associato a un utente valido.");
         }
-    }
-    
 
-    /**
-     * Ottieni la busta del messaggio.
-     */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Il tuo ordine è stato confermato!',
-        );
-    }
-
-    /**
-     * Ottieni la definizione del contenuto del messaggio.
-     */
-    public function content(): Content
-    {
-        return new Content(
-            markdown: 'emails.orders.confirmed',  // Usa una vista markdown per il corpo dell'email (se preferisci)
-        );
-    }
-
-    /**
-     * Ottieni gli allegati per il messaggio.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        return [];
+        return $this->to($this->order->user->email)
+                    ->subject('Il tuo ordine è stato confermato!')
+                    ->markdown('emails.orders.confirmed')
+                    ->with(['order' => $this->order]);
     }
 }

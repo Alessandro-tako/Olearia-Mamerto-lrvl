@@ -44,33 +44,7 @@
 </head>
 
 <body>
-    <x-navbar></x-navbar>
-
-    <!-- Success message -->
-    @if (session('message'))
-        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)"
-            class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('message') }}
-            <button type="button" class="btn-close" @click="show = false" aria-label="Chiudi"></button>
-        </div>
-    @endif
-
-    <!-- Cookie Banner (Temporaneo) -->
-    {{-- <script type="text/javascript">
-        var _iub = _iub || [];
-        _iub.csConfiguration = { "siteId": 3881849, "cookiePolicyId": 18156025, "lang": "it", "storage": { "useSiteId": true } };
-    </script>
-    <script type="text/javascript" src="https://cs.iubenda.com/autoblocking/3881849.js"></script>
-    <script type="text/javascript" src="//cdn.iubenda.com/cs/gpp/stub.js"></script>
-    <script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script> --}}
-
     {{ $slot }}
-
-    <!-- WhatsApp Icon -->
-    <a href="https://wa.me/3382017840" class="whatsapp-icon" target="_blank" aria-label="Contattaci su WhatsApp">
-        <i class="bi bi-whatsapp"></i>
-    </a>
-
     <!-- Footer -->
     <x-footer></x-footer>
 

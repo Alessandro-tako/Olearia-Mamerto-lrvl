@@ -6,6 +6,17 @@
     <x-success-message></x-success-message>
 
     <main class="container mt-4">
+
+        <form method="GET" action="{{ route('admin.orders') }}" class="mb-4 text-start">
+            <label for="search" class="form-label text-white">Cerca ordini (ID, email, stato):</label>
+            <div class="input-group">
+                <input type="text" name="search" id="search" class="form-control"
+                    value="{{ request('search') }}" placeholder="es: mario@rossi.it o 123">
+                <button class="btn btn-outline-light" type="submit">Cerca</button>
+            </div>
+        </form>
+        
+        
         <div class="row height-custom justify-content-center align-items-center py-5">
             <div class="col-12 col-md-10 text-center">
                 <div class="p-4 shadow bg-dark text-white">
@@ -13,7 +24,13 @@
 
                     @forelse ($orders as $order)
                         <div class="mb-5 p-3 border rounded">
-                            <h5>ID Ordine: <span class="text-success">#{{ $order->id }}</span></h5>
+                            <h5>
+                                ID Ordine: <span class="text-success">#{{ $order->id }}</span>
+                                @if ($order->status === 'Pagato e in attesa')
+                                    <span class="badge bg-info text-dark ms-2">🆕 Nuovo ordine</span>
+                                @endif
+                            </h5>
+                            
                             <p><strong>Utente:</strong> {{ $order->user->email }}</p>
                             <p><strong>Totale:</strong> €{{ number_format($order->total_amount, 2, ',', '.') }}</p>
                             <p>

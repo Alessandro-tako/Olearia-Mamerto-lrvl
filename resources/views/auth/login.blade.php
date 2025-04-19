@@ -1,6 +1,4 @@
 <x-layout>
-
-
     <section class="container my-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -31,11 +29,15 @@
                             <div id="create-user" class="mb-2 fw-semibold">Non hai un profilo?<a class="card-price fs-5 text-decoration-none custom-link1" href="{{ route('register') }}"> Registrati</a></div>
                             <button type="submit" class="btn btn-custom">Accedi</button>
                         </form>
+
+                        <!-- Link per il reset della password -->
+                        <div class="mt-3 text-center">
+                            <a href="{{ route('password.request') }}" class="fs-6 text-decoration-none custom-link1">Hai dimenticato la password?</a>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-
 </x-layout>

@@ -22,11 +22,18 @@ class OrderController extends Controller
     
 
     // Mostra tutti gli ordini per l'amministratore
-    public function adminOrders()
+    public function adminOrders(Request $request)
     {
-        $orders = Order::with('user')->get(); // Carica gli ordini con l'utente
+        if ($request->filled('search')) {
+            $orders = Order::search($request->input('search'))->get();
+        } else {
+            $orders = Order::with('user')->orderBy('created_at', 'desc')->get();
+        }
+    
         return view('admin.admin_orders', compact('orders'));
     }
+    
+    
 
     // Modifica lo stato di un ordine (solo per admin)
     public function updateStatus(Request $request, Order $order)

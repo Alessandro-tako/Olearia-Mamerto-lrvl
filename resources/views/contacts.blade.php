@@ -16,7 +16,7 @@
                     <dd>+39 3382017840</dd>
 
                     <dt>E-mail</dt>
-                    <dd><a href="mailto:oleariamamerto@gmail.com">oleariamamerto@gmail.com</a></dd>
+                    <dd><a class="text-white" href="mailto:oleariamamerto@gmail.com">oleariamamerto@gmail.com</a></dd>
                 </dl>
 
                 <p>Per rimanere aggiornato, non dimenticare di seguirci sui social!</p>

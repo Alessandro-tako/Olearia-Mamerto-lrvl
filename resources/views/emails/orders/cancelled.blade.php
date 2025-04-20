@@ -17,6 +17,12 @@
 
                         <p>Grazie,</p>
                         <p>{{ config('app.name') }}</p>
+                        <p style="font-size: 0.875rem; color: #666; margin-top: 1rem;">
+                            Questa email è stata generata automaticamente, ti chiediamo di non rispondere direttamente a
+                            questo messaggio.<br>
+                            Per qualsiasi richiesta o supporto, visita la nostra <a href="{{ route('contacts')}}"
+                                style="color: #228b22; text-decoration: none;">pagina contatti</a>.
+                        </p>
                     </div>
                 </div>
             </div>

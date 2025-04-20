@@ -17,14 +17,14 @@
                             @endforeach
                         </ul>
 
-                        <p>Totale: €{{ $order->total }}</p>
+                        <p>Totale: €{{ $order->total_amount }}</p>
 
-                        <p>Ti avviseremo quando l'ordine arriverà a casa tua.</p>
+                        <p>Grazie ancora e torna presto ad acquistare da noi 🛒</p>
 
                         <p>Se hai domande o problemi con la spedizione, non esitare a contattarci.</p>
 
                         <p><strong>Ci farebbe piacere sentire la tua opinione!</strong></p>
-                        <p>Se ti è piaciuto il nostro servizio, ti invitiamo a lasciare una recensione su Google. Questo aiuta altri clienti a trovare il nostro servizio!</p>
+                        <p>Se ti è piaciuto il nostro servizio, ti invitiamo a lasciare una recensione su Google. Questo aiuterà noi a migliorare e altri clienti a trovare il nostro servizio!</p>
                         
                         <div class="star-rating" style="font-size: 2rem; color: #ffcc00;">
                             <i class="bi bi-star-fill"></i>
@@ -38,6 +38,12 @@
 
                         <p>Grazie,</p>
                         <p>{{ config('app.name') }}</p>
+                        <p style="font-size: 0.875rem; color: #666; margin-top: 1rem;">
+                            Questa email è stata generata automaticamente, ti chiediamo di non rispondere direttamente a
+                            questo messaggio.<br>
+                            Per qualsiasi richiesta o supporto, visita la nostra <a href="{{ route('contacts')}}"
+                                style="color: #228b22; text-decoration: none;">pagina contatti</a>.
+                        </p>
                     </div>
                 </div>
             </div>

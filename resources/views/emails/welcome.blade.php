@@ -4,31 +4,25 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header form-custom">
-                        <h3 class="text-center card-title fs-2 custom-link1">Nuovo Messaggio dal Modulo di Contatto</h3>
+                        <h3 class="text-center card-title fs-2 custom-link1">Benvenuto su {{ config('app.name') }}!</h3>
                     </div>
                     <div class="card-body">
-                        <h1>Ciao,</h1>
-                        <p>Hai ricevuto un nuovo messaggio dal modulo di contatto:</p>
+                        <h1>Ciao {{ $user->name }} 👋</h1>
+                        <p>Grazie per esserti registrato su <strong>{{ config('app.name') }}</strong>! 🎉</p>
 
-                        <p><strong>Nome:</strong> {{ $data['name'] }}</p>
-                        <p><strong>Email:</strong> {{ $data['email'] }}</p>
+                        <p>Siamo felicissimi di averti a bordo! Inizia subito a esplorare i nostri prodotti e servizi.</p>
 
-                        <p><strong>Messaggio:</strong></p>
-                        <p>{{ $data['message'] }}</p>
+                        <p>Se hai bisogno di supporto, non esitare a contattarci.</p>
 
-                        <p>Ti consigliamo di rispondere il prima possibile per soddisfare la richiesta del cliente.</p>
 
-                        <p>Grazie,</p>
+                        <p>Grazie per esserti unito a noi,</p>
                         <p>{{ config('app.name') }}</p>
-                        <hr style="margin-top: 2rem; border: none; border-top: 1px solid #ddd;">
-
                         <p style="font-size: 0.875rem; color: #666; margin-top: 1rem;">
                             Questa email è stata generata automaticamente, ti chiediamo di non rispondere direttamente a
                             questo messaggio.<br>
                             Per qualsiasi richiesta o supporto, visita la nostra <a href="{{ route('contacts')}}"
                                 style="color: #228b22; text-decoration: none;">pagina contatti</a>.
                         </p>
-
                     </div>
                 </div>
             </div>

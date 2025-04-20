@@ -5,6 +5,7 @@
                 <h1 class="display-4">Dettaglio: {{ $article->title }}</h1>
             </div>
             <x-success-message></x-success-message>
+
             <div class="col-12 col-md-6 mb-3">
                 @if ($article->images->count() > 0)
                     <div class="d-flex flex-column align-items-center">
@@ -38,15 +39,25 @@
 
             <div class="col-12 col-md-6 mb-3 text-center">
                 <h2 class="display-5"><span class="fw-bold">Titolo: </span> {{ $article->title }}</h2>
+
                 <div class="d-flex flex-column justify-content-center h-75">
-                    <h4 class="card-price">Prezzo:
-                        €{{ number_format($article->price - $article->discount, 2, ',', '.') }}
-                        @if ($article->discount > 0)
-                            <span class="text-success text-decoration-line-through ms-2">
-                                €{{ number_format($article->price, 2, ',', '.') }}
+                    <h4 class="card-price">
+                        Prezzo:
+                        @if ($article->stock > 0)
+                            €{{ number_format($article->price - $article->discount, 2, ',', '.') }}
+                            @if ($article->discount > 0)
+                                <span class="text-success text-decoration-line-through ms-2">
+                                    €{{ number_format($article->price, 2, ',', '.') }}
+                                </span>
+                            @endif
+                        @else
+                            <span class="text-danger text-decoration-line-through ms-2">
+                                €{{ number_format($article->price - $article->discount, 2, ',', '.') }}
                             </span>
+                            <span class="text-danger ms-2">Sold Out</span>
                         @endif
                     </h4>
+
                     <h5>Descrizione:</h5>
                     <p>{{ $article->description }}</p>
 
@@ -92,10 +103,19 @@
                             </a>
                         </div>
                     @else
-                        <form action="{{ route('cart.add', $article->id) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="btn btn-custom">Aggiungi al carrello <i class="bi bi-cart"></i></button>
-                        </form>
+                        <!-- Pulsante Aggiungi al carrello o Sold Out -->
+                        @if ($article->stock > 0)
+                            <form action="{{ route('cart.add', $article->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-custom">Aggiungi al carrello <i class="bi bi-cart"></i></button>
+                            </form>
+                        @else
+                        <div class="col-12 col-md-6 mt-3">
+                            <button type="button" class="btn btn-custom w-100" disabled>
+                                Aggiungi al <i class="bi bi-cart"></i> (Sold Out)
+                            </button>
+                        </div>
+                        @endif
                     @endif
                 </div>
             </div>

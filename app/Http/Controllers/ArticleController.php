@@ -33,9 +33,10 @@ class ArticleController extends Controller implements HasMiddleware
         return view('article.create');
     }
     // per il dettaglio degli articoli
-    public function show(Article $article){
-        
-        return view('article.show', compact('article'));
+    public function show(Article $article)
+    {
+        $user = auth()->user();  // Aggiungi questa riga
+        return view('article.show', compact('article', 'user'));  // Passa la variabile $user
     }
     // da fare per il carrelo
     public function cart()
@@ -127,6 +128,7 @@ class ArticleController extends Controller implements HasMiddleware
     {
         $query = $request->input('query');
         $articles = Article::search($query)->where('is_accepted', true)->paginate(10);
-        return view('article.searched', ['articles' => $articles, 'query' => $query]);
+        $user = auth()->user(); // Ottieni l'utente autenticato
+        return view('article.searched', compact('articles', 'query', 'user')); // Passa l'utente alla vista
     }
 }

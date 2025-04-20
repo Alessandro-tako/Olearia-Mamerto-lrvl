@@ -1,16 +1,17 @@
 <x-layout>
     <header class="bg-dark text-white text-center py-3">
-        <h1><i class="bi bi-envelope textColor fs-1"></i> Contattaci</h1>
+        <h1><i class="bi bi-person-circle textColor fs-1"></i> Profilo {{ $user->name }}</h1>
     </header>
 
     <x-success-message />
 
     <main class="container mt-4">
+        <!-- Profilo -->
         <div class="row justify-content-center align-items-center py-4">
             <div class="col-12 col-md-6">
                 <div class="p-4 bg-dark text-white rounded shadow text-center">
-                    <h2 class="fw-bold mb-3">Modulo di Contatto</h2>
-                    <p class="mb-0">Hai domande o richieste? Compila il modulo qui sotto e ti risponderemo il prima possibile!</p>
+                    <h2 class="fw-bold mb-3">Amministratore</h2>
+                    <p class="mb-0">Ciao <strong>{{ $user->name }}</strong>, qui puoi gestire i tuoi articoli in totale autonomia.</p>
                 </div>
             </div>
         </div>
@@ -26,39 +27,27 @@
             </div>
         @endif
 
-        <!-- Form di contatto -->
+        <!-- Sezione articoli -->
         <div class="row justify-content-center text-center mt-5">
-            <div class="col-12 col-md-8">
-                <form action="{{ route('contact.submit') }}" method="POST">
-                    @csrf
-
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Nome</label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
-                        @error('name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required>
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="message" class="form-label">Messaggio</label>
-                        <textarea class="form-control @error('message') is-invalid @enderror" id="message" name="message" rows="4" required>{{ old('message') }}</textarea>
-                        @error('message')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Invia</button>
-                </form>
+            <div class="col-12">
+                <h2 class="fw-bold mb-4">I miei Prodotti</h2>
             </div>
+
+            @forelse ($articles as $article)
+                <div class="col-12 col-sm-6 col-md-4 mb-4">
+                    <x-card :article="$article" :user="$user" />
+                </div>
+            @empty
+                <div class="col-12 text-center mt-3">
+                    <h3 class="fst-italic">Non ci sono Articoli</h3>
+                    <a href="{{ route('article.create') }}" class="btn btn-success mt-3">Creane uno ora</a>
+                </div>
+            @endforelse
+        </div>
+
+        <!-- Paginazione -->
+        <div class="d-flex justify-content-center mt-4">
+            {{ $articles->links() }}
         </div>
     </main>
 </x-layout>

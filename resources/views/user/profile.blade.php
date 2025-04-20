@@ -39,11 +39,11 @@
 
             <!-- Ordini -->
             <section class="col-12 col-md-6" aria-labelledby="orders-title">
-                <div class="p-3 shadows rounded-4">
+                <div class="text-center p-3 shadows rounded-4">
                     <h2 id="orders-title" class="h4 textColor mb-4">I tuoi ordini</h2>
 
                     @if ($orders->isEmpty())
-                        <p class="text-muted">Non hai ancora effettuato ordini.</p>
+                        <p class="text-whitw">Non hai ancora effettuato ordini.</p>
                     @else
                         <div class="table-responsive">
                             <table class="table table-dark table-bordered">

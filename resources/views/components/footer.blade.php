@@ -43,25 +43,8 @@
         <div class="row mt-4">
             <div class="col-12 text-center">
                 <p class="text-white mb-0">&copy; 2025 Olearia Mamerto. Tutti i diritti riservati.</p>
+                <p class="text-white small">🔥 Powered by Takohr • il Forgiatore di Codice ⚒️</p>
             </div>
         </div>
     </div>
-    {{-- <a href="https://www.iubenda.com/privacy-policy/18156025"
-            class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe " title="Privacy Policy ">Privacy
-            Policy</a>
-        <script
-            type="text/javascript">(function (w, d) { var loader = function () { var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src = "https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s, tag); }; if (w.addEventListener) { w.addEventListener("load", loader, false); } else if (w.attachEvent) { w.attachEvent("onload", loader); } else { w.onload = loader; } })(window, document);</script>
-
-        <a href="https://www.iubenda.com/privacy-policy/18156025/cookie-policy"
-            class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe " title="Cookie Policy ">Cookie
-            Policy</a>
-        <script
-            type="text/javascript">(function (w, d) { var loader = function () { var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src = "https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s, tag); }; if (w.addEventListener) { w.addEventListener("load", loader, false); } else if (w.attachEvent) { w.attachEvent("onload", loader); } else { w.onload = loader; } })(window, document);</script>
-
-        <a href="https://www.iubenda.com/termini-e-condizioni/18156025"
-            class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe " title="Termini e Condizioni ">Termini
-            e Condizioni</a>
-
-            <script
-            type="text/javascript">(function (w, d) { var loader = function () { var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src = "https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s, tag); }; if (w.addEventListener) { w.addEventListener("load", loader, false); } else if (w.attachEvent) { w.attachEvent("onload", loader); } else { w.onload = loader; } })(window, document);</script> --}}
 </footer>

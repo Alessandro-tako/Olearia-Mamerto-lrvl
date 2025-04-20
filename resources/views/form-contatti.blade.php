@@ -1,6 +1,7 @@
 <x-layout>
     <section class="container my-5">
         <h2 class="text-center">Contattaci</h2>
+        <p class="text-center mb-4">Scrivi il tuo messaggio, ti ricontatteremo al più presto!</p>
         
         <!-- Mostra il messaggio di successo se presente -->
         @if(session('success'))

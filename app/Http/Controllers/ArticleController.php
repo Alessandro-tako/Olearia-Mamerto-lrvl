@@ -70,7 +70,7 @@ class ArticleController extends Controller implements HasMiddleware
     {
         $article->delete();
     
-        return redirect()->back()->with('success', 'Articolo eliminato con successo.');
+        return redirect()->route('article.index')->with('success', 'Articolo eliminato con successo.');
     }
     // logica della modifica dell'articolo
     public function update(Request $request, Article $article)

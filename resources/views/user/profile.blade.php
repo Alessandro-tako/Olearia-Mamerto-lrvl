@@ -1,9 +1,45 @@
 <x-layout>
-    <header class="bg-dark text-white text-center py-3" role="banner">
-        <h1>
-            <i class="bi bi-person-circle textColor fs-1" aria-hidden="true"></i>
-            <span>Ciao {{ $user->name }}</span>
-        </h1>
+    <header class="bg-dark text-white py-3" role="banner">
+        <div class="container d-flex justify-content-between align-items-center flex-wrap">
+            <h1 class="mb-0 fs-4 d-flex align-items-center">
+                <i class="bi bi-person-circle textColor fs-2 me-2" aria-hidden="true"></i>
+                <span class="text-break">Ciao {{ $user->name }}</span>
+            </h1>
+
+            <!-- Icona Ingranaggio -->
+            <button class="btn btn-sm btn-outline-light mt-md-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseOptions" aria-expanded="false" aria-controls="collapseOptions"
+                aria-label="Opzioni avanzate" title="Opzioni avanzate">
+                <i class="bi bi-gear-fill fs-5"></i>
+            </button>
+        </div>
+
+        <!-- Collapse opzioni -->
+        <div class="collapse mt-3 text-center" id="collapseOptions">
+            <div class="container">
+                <div class="row justify-content-evenly">
+
+                    @if ($shippingAddress)
+                        <a class="btn btn-custom me-2 my-5 col-6 col-md-2" href="{{ route('user.shipping') }}">
+                            Modifica l'indirizzo
+                        </a>
+                    @else
+                        <a class="btn btn-custom me-2 my-5 col-6 col-md-2" href="{{ route('user.shipping') }}">
+                            Aggiungi un indirizzo
+                        </a>
+                    @endif
+
+                    <form method="POST" action="{{ route('profile.destroy') }}" class="d-inline"
+                        onsubmit="return confirm('Sei sicuro di voler eliminare il tuo profilo? Questa azione è irreversibile.')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-outline-danger my-5">
+                            Elimina il mio profilo
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </header>
 
     <x-success-message></x-success-message>
@@ -17,7 +53,8 @@
 
                     @if ($shippingAddress)
                         <ul class="list-unstyled text-start">
-                            <li><strong>Nome:</strong> {{ $shippingAddress->first_name }} {{ $shippingAddress->last_name }}</li>
+                            <li><strong>Nome:</strong> {{ $shippingAddress->first_name }}
+                                {{ $shippingAddress->last_name }}</li>
                             <li><strong>Indirizzo:</strong> {{ $shippingAddress->address }}</li>
                             <li><strong>Città:</strong> {{ $shippingAddress->city }}</li>
                             <li><strong>CAP:</strong> {{ $shippingAddress->postal_code }}</li>
@@ -28,9 +65,6 @@
                     @else
                         <p>Non hai ancora aggiunto un indirizzo di spedizione.</p>
                     @endif
-
-
-
                 </div>
             </section>
 
@@ -40,7 +74,7 @@
                     <h2 id="orders-title" class="h4 textColor mb-4">I tuoi ordini</h2>
 
                     @if ($orders->isEmpty())
-                        <p class="text-whitw">Non hai ancora effettuato ordini.</p>
+                        <p class="text-white">Non hai ancora effettuato ordini.</p>
                     @else
                         <div class="table-responsive">
                             <table class="table table-dark table-bordered">
@@ -81,40 +115,4 @@
             </section>
         </div>
     </main>
-                        <!-- Opzioni avanzate -->
-                        <div class="accordion mt-4" id="advancedOptionsAccordion">
-                            <div class="col-12 col-md-2">
-                                <h2 class="accordion-header" id="headingOptions">
-                                    <button class="accordion-button collapsed bg-dark text-white" type="button"
-                                        data-bs-toggle="collapse" data-bs-target="#collapseOptions"
-                                        aria-expanded="false" aria-controls="collapseOptions">
-                                        Opzioni avanzate
-                                    </button>
-                                </h2>
-                                <div id="collapseOptions" class="accordion-collapse collapse"
-                                    aria-labelledby="headingOptions" data-bs-parent="#advancedOptionsAccordion">
-                                    <div class="accordion-body text-center">
-                                        @if ($shippingAddress)
-                                            <!-- Se l'indirizzo è presente, mostra il pulsante Modifica -->
-                                            <a class="btn btn-custom me-2 my-5"
-                                                href="{{ route('user.shipping') }}">Modifica l'indirizzo</a>
-                                        @else
-                                            <!-- Se l'indirizzo non è presente, mostra il pulsante Aggiungi -->
-                                            <a class="btn btn-custom me-2 my-5"
-                                                href="{{ route('user.shipping') }}">Aggiungi un indirizzo</a>
-                                        @endif
-    
-                                        <!-- Pulsante per eliminare il profilo -->
-                                        <form method="POST" action="{{ route('profile.destroy') }}" class="d-inline"
-                                            onsubmit="return confirm('Sei sicuro di voler eliminare il tuo profilo? Questa azione è irreversibile.')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-outline-danger mt-5">
-                                                Elimina il mio profilo
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 </x-layout>

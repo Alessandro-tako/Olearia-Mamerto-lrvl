@@ -15,15 +15,27 @@ class ProfileController extends Controller
     {
         $user = $request->user();
     
-        // Invia la mail
+        // Invia l'email di conferma
         Mail::to($user->email)->send(new AccountDeleted($user));
     
-        // Elimina l'utente
-        $user->delete();
+        // Anonimizza gli ordini
+        foreach ($user->orders as $order) {
+            $order->user_id = null;
+            $order->save();
+        }
     
-        // Logout e redirect
+        // Elimina indirizzo di spedizione associato (opzionale)
+        if ($user->shippingAddress) {
+            $user->shippingAddress->delete();
+        }
+    
+        // Logout
         Auth::logout();
+    
+        // Hard delete dell'utente
+        $user->forceDelete(); // IMPORTANTE: forza l'eliminazione anche se hai SoftDeletes attivo
     
         return redirect('/')->with('success', 'Il tuo account è stato eliminato.');
     }
+    
 }

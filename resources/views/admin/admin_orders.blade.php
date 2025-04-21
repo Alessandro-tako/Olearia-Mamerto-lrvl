@@ -20,7 +20,7 @@
                 <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
                     <div>
                         <strong>Ordine #{{ $order->id }}</strong> • 
-                        <small>{{ $order->user->email }}</small>
+                        <small>{{ $order->user?->email ?? 'Utente eliminato' }}</small>
                     </div>
                     @if ($order->status === 'Pagato e in attesa')
                         <span class="badge bg-info text-dark">🆕 Nuovo ordine</span>
@@ -33,33 +33,43 @@
                             <p class="mb-1"><strong>Totale:</strong> €{{ number_format($order->total_amount, 2, ',', '.') }}</p>
                             <p class="mb-1">
                                 <strong>Stato:</strong>
-                                <span class="badge
-                                    @switch($order->status)
-                                        @case('Pagato e in attesa') bg-info @break
-                                        @case('Confermato') bg-warning text-dark @break
-                                        @case('Spedito') bg-success @break
-                                        @case('cancellato') bg-danger @break
-                                        @default bg-light text-dark
-                                    @endswitch">
-                                    {{ $order->status }}
-                                </span>
+                                @if ($order->user)
+                                    <span class="badge
+                                        @switch($order->status)
+                                            @case('Pagato e in attesa') bg-info @break
+                                            @case('Confermato') bg-warning text-dark @break
+                                            @case('Spedito') bg-success @break
+                                            @case('cancellato') bg-danger @break
+                                            @default bg-light text-dark
+                                        @endswitch">
+                                        {{ $order->status }}
+                                    </span>
+                                @else
+                                    <!-- Badge rosso con scritto "Eliminato" se l'utente è eliminato -->
+                                    <span class="badge bg-danger text-white">Eliminato</span>
+                                @endif
                             </p>
                         </div>
 
                         <div class="col-12 col-md-8 text-end">
-                            <form action="{{ route('order.update.status', $order->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('PATCH')
-                                <div class="input-group">
-                                    <select name="status" class="form-select">
-                                        <option value="Pagato e in attesa" {{ $order->status == 'Pagato e in attesa' ? 'selected' : '' }}>Pagato e in attesa</option>
-                                        <option value="Confermato" {{ $order->status == 'Confermato' ? 'selected' : '' }}>Confermato</option>
-                                        <option value="Spedito" {{ $order->status == 'Spedito' ? 'selected' : '' }}>Spedito</option>
-                                        <option value="cancellato" {{ $order->status == 'cancellato' ? 'selected' : '' }}>Cancellato</option>
-                                    </select>
-                                    <button type="submit" class="btn btn-outline-success">Aggiorna</button>
-                                </div>
-                            </form>
+                            @if ($order->user)  <!-- Verifica che l'utente non sia stato eliminato -->
+                                <form action="{{ route('order.update.status', $order->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('PATCH')
+                                    <div class="input-group">
+                                        <select name="status" class="form-select">
+                                            <option value="Pagato e in attesa" {{ $order->status == 'Pagato e in attesa' ? 'selected' : '' }}>Pagato e in attesa</option>
+                                            <option value="Confermato" {{ $order->status == 'Confermato' ? 'selected' : '' }}>Confermato</option>
+                                            <option value="Spedito" {{ $order->status == 'Spedito' ? 'selected' : '' }}>Spedito</option>
+                                            <option value="cancellato" {{ $order->status == 'cancellato' ? 'selected' : '' }}>Cancellato</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-outline-success">Aggiorna</button>
+                                    </div>
+                                </form>
+                            @else
+                                <!-- Disabilita il campo select e il pulsante di aggiornamento se l'utente è stato eliminato -->
+                                <p class="text-muted">Non puoi modificare lo stato dell'ordine perché l'utente è stato eliminato.</p>
+                            @endif
                         </div>
                     </div>
 
@@ -70,7 +80,7 @@
                     <div class="collapse" id="details-{{ $order->id }}">
                         <div class="row mt-3">
                             <div class="col-md-6">
-                                @if ($order->user->shippingAddress)
+                                @if ($order->user && $order->user->shippingAddress) <!-- Verifica che l'utente e l'indirizzo esistano -->
                                     <h6 class="textColor">📍 Indirizzo di Spedizione:</h6>
                                     <ul class="list-unstyled small">
                                         <li><strong>Nome:</strong> {{ $order->user->shippingAddress->first_name }} {{ $order->user->shippingAddress->last_name }}</li>
@@ -80,6 +90,8 @@
                                         <li><strong>Paese:</strong> {{ $order->user->shippingAddress->country }}</li>
                                         <li><strong>Telefono:</strong> {{ $order->user->shippingAddress->phone_number }}</li>
                                     </ul>
+                                @else
+                                    <p class="text-muted">Indirizzo non disponibile.</p>
                                 @endif
                             </div>
                             <div class="col-md-6">

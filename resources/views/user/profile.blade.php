@@ -25,15 +25,12 @@
                             <li><strong>Paese:</strong> {{ $shippingAddress->country }}</li>
                             <li><strong>Telefono:</strong> {{ $shippingAddress->phone_number }}</li>
                         </ul>
-                        <div class="mt-3">
-                            <a class="btn-custom" href="{{ route('user.shipping') }}" aria-label="Modifica indirizzo di spedizione">Modifica l'indirizzo</a>
-                        </div>
                     @else
                         <p>Non hai ancora aggiunto un indirizzo di spedizione.</p>
-                        <div class="mt-3">
-                            <a class="btn-custom" href="{{ route('user.shipping') }}" aria-label="Aggiungi indirizzo di spedizione">Aggiungi un indirizzo</a>
-                        </div>
                     @endif
+
+
+
                 </div>
             </section>
 
@@ -61,7 +58,8 @@
                                             <td>{{ $order->id }}</td>
                                             <td>€ {{ number_format($order->total_amount, 2, ',', '.') }}</td>
                                             <td>
-                                                <span class="badge
+                                                <span
+                                                    class="badge
                                                     @switch($order->status)
                                                         @case('Pagato e in attesa') bg-secondary @break
                                                         @case('Confermato') bg-warning text-dark @break
@@ -83,4 +81,40 @@
             </section>
         </div>
     </main>
+                        <!-- Opzioni avanzate -->
+                        <div class="accordion mt-4" id="advancedOptionsAccordion">
+                            <div class="col-12 col-md-2">
+                                <h2 class="accordion-header" id="headingOptions">
+                                    <button class="accordion-button collapsed bg-dark text-white" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#collapseOptions"
+                                        aria-expanded="false" aria-controls="collapseOptions">
+                                        Opzioni avanzate
+                                    </button>
+                                </h2>
+                                <div id="collapseOptions" class="accordion-collapse collapse"
+                                    aria-labelledby="headingOptions" data-bs-parent="#advancedOptionsAccordion">
+                                    <div class="accordion-body text-center">
+                                        @if ($shippingAddress)
+                                            <!-- Se l'indirizzo è presente, mostra il pulsante Modifica -->
+                                            <a class="btn btn-custom me-2 my-5"
+                                                href="{{ route('user.shipping') }}">Modifica l'indirizzo</a>
+                                        @else
+                                            <!-- Se l'indirizzo non è presente, mostra il pulsante Aggiungi -->
+                                            <a class="btn btn-custom me-2 my-5"
+                                                href="{{ route('user.shipping') }}">Aggiungi un indirizzo</a>
+                                        @endif
+    
+                                        <!-- Pulsante per eliminare il profilo -->
+                                        <form method="POST" action="{{ route('profile.destroy') }}" class="d-inline"
+                                            onsubmit="return confirm('Sei sicuro di voler eliminare il tuo profilo? Questa azione è irreversibile.')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-outline-danger mt-5">
+                                                Elimina il mio profilo
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 </x-layout>

@@ -47,6 +47,8 @@ Route::middleware('auth')->group(function() {
 
 // profilo
 Route::get('/profilo', [ArticleController::class, 'profile'])->name('user.profile');
+Route::delete('/profilo', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 
 // elementi per la spedizione
 Route::middleware(['auth'])->group(function () {
@@ -56,6 +58,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Ricerca
 Route::get('/search/article', [ArticleController::class, 'searchArticles'])->name('article.search');
+
 
 // pagamento
 Route::middleware(['auth'])->group(function () {

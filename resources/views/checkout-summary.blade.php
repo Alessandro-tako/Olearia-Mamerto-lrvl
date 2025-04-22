@@ -12,22 +12,35 @@
 
                     <ul class="list-group list-group-flush mb-4">
                         @foreach ($cartItems as $item)
+                            @php
+                                $priceAfterDiscount = $item->article->price - $item->article->discount;
+                                $totalForItem = $priceAfterDiscount > 0 ? $priceAfterDiscount * $item->quantity : $item->article->price * $item->quantity;
+                            @endphp
                             <li class="list-group-item d-flex justify-content-between align-items-start py-3">
                                 <div class="me-auto">
                                     <h3 class="h6 mb-1">{{ $item->article->title }}</h3>
+                                    
                                     <small class="text-muted">
-                                        {{ $item->quantity }} x €{{ number_format($item->article->price, 2) }}
+                                        {{ $item->quantity }} x 
+                                        @if ($item->article->discount > 0)
+                                            <span class="text-decoration-line-through">€{{ number_format($item->article->price, 2) }}</span>
+                                            €{{ number_format($priceAfterDiscount, 2) }}
+                                        @else
+                                            €{{ number_format($item->article->price, 2) }}
+                                        @endif
                                     </small>
                                 </div>
                                 <span class="fw-bold" aria-label="Totale parziale per questo articolo">
-                                    €{{ number_format($item->article->price * $item->quantity, 2) }}
+                                    €{{ number_format($totalForItem, 2) }}
                                 </span>
                             </li>
                         @endforeach
 
                         <li class="list-group-item d-flex justify-content-between py-3 border-top">
                             <span class="fw-bold text-uppercase">Totale</span>
-                            <span class="fw-bold fs-5 text-success">€{{ number_format($total, 2) }}</span>
+                            <span class="fw-bold fs-5 text-success">
+                                €{{ number_format($cartItems->sum(fn($item) => ($item->article->price - $item->article->discount) * $item->quantity), 2) }}
+                            </span>
                         </li>
                     </ul>
 

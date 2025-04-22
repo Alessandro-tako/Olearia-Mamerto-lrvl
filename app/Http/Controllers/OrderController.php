@@ -32,7 +32,8 @@ class OrderController extends Controller
     // Mostra tutti gli ordini per l'amministratore
     public function adminOrders(Request $request)
     {
-        // $this->authorize('viewAny', Order::class); // Assicurati che solo l'amministratore possa vedere gli ordini
+        // Assicurati che solo l'amministratore possa vedere gli ordini
+        // $this->authorize('viewAny', Order::class);
 
         if ($request->filled('search')) {
             $orders = Order::search($request->input('search'))->get();
@@ -43,10 +44,25 @@ class OrderController extends Controller
         return view('admin.admin_orders', compact('orders'));
     }
 
+    // Calcola il totale dell'ordine tenendo conto degli sconti in valore assoluto
+    protected function calculateOrderTotal(Order $order)
+    {
+        $total = 0;
+        foreach ($order->items as $item) {
+            $unitPrice = $item->article->price ?? 0; // Prezzo pieno
+            $discount = $item->article->discount ?? 0; // Sconto in valore assoluto
+            $finalPrice = $unitPrice - $discount; // Calcolo del prezzo finale con sconto assoluto
+            $total += $finalPrice * $item->quantity; // Aggiungi al totale
+        }
+        $order->total_amount = $total;
+        $order->save();
+        return $total;
+    }
+
     // Modifica lo stato di un ordine (solo per admin)
     public function updateStatus(Request $request, Order $order)
     {
-        // Controlla se l'utente è un amministratore
+        // Verifica che l'utente sia un amministratore
         if (!Auth::user()->is_admin) {
             return redirect()->route('home')->with('error', 'Non hai permessi per modificare lo stato dell\'ordine.');
         }
@@ -56,6 +72,9 @@ class OrderController extends Controller
             'status' => 'required|in:Pagato e in attesa,Confermato,Spedito,cancellato',
         ]);
 
+        // Calcolare il totale dell'ordine con lo sconto in valore assoluto
+        $total = $this->calculateOrderTotal($order);
+
         // Aggiorna lo stato dell'ordine
         $order->status = $request->input('status');
         $order->save();
@@ -63,23 +82,23 @@ class OrderController extends Controller
         // Invia l'email in base allo stato
         switch ($order->status) {
             case 'Pagato e in attesa':
-                // Invia email di acquisto
-                Mail::to($order->user->email)->send(new OrderPaidMail($order));
+                // Invia email di acquisto con il totale dell'ordine
+                Mail::to($order->user->email)->send(new OrderPaidMail($order, $total));
                 break;
 
             case 'Confermato':
-                // Invia email di conferma
-                Mail::to($order->user->email)->send(new OrderConfirmedMail($order));
+                // Invia email di conferma con il totale dell'ordine
+                Mail::to($order->user->email)->send(new OrderConfirmedMail($order, $total));
                 break;
 
             case 'Spedito':
-                // Invia email di spedizione
-                Mail::to($order->user->email)->send(new OrderShippedMail($order));
+                // Invia email di spedizione con il totale dell'ordine
+                Mail::to($order->user->email)->send(new OrderShippedMail($order, $total));
                 break;
 
             case 'cancellato':
-                // Invia email di annullamento
-                Mail::to($order->user->email)->send(new OrderCancelledMail($order));
+                // Invia email di annullamento con il totale dell'ordine
+                Mail::to($order->user->email)->send(new OrderCancelledMail($order, $total));
                 break;
         }
 

@@ -36,7 +36,8 @@ class PaymentController extends Controller
             return redirect()->route('cart.show')->with('message', 'Il carrello è vuoto!');
         }
 
-        $total = $cartItems->sum(fn($item) => $item->article->price * $item->quantity);
+        // Calcolare il totale scontato
+        $total = $cartItems->sum(fn($item) => ($item->article->price - $item->article->discount) * $item->quantity);
 
         $tokenResponse = Http::asForm()->withBasicAuth(
             config('paypal.sandbox.client_id'),
@@ -64,7 +65,7 @@ class PaymentController extends Controller
                 ],
                 'shipping' => [
                     'name' => [
-                        'full_name' => Auth::user()->name,
+                        'full_name' => $shipping->first_name . ' ' . $shipping->last_name,
                     ],
                     'address' => [
                         'address_line_1' => $shipping->address ?? 'Indirizzo mancante',

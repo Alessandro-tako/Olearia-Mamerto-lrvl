@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Creazione della tabella users
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -21,12 +22,14 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        // Creazione della tabella password_reset_tokens
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
+        // Creazione della tabella sessions con foreign key a user_id
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
@@ -34,6 +37,9 @@ return new class extends Migration
             $table->text('user_agent')->nullable();
             $table->longText('payload');
             $table->integer('last_activity')->index();
+
+            // Impostiamo la foreign key con onDelete('set null')
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 

@@ -45,9 +45,19 @@
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
                             <div>
                                 <h5 class="mb-1">{{ $cartItem->article->title }}</h5>
+                                @if($cartItem->article->discount > 0)
+                                <p class="mb-0 text-danger text-decoration-line-through">
+                                    {{ number_format($cartItem->article->price, 2) }} €
+                                </p>
+                                <p class="mb-0 text-success fw-semibold">
+                                    {{ number_format($cartItem->article->price - $cartItem->article->discount, 2) }} €
+                                </p>
+                            @else
                                 <p class="mb-0 text-success fw-semibold">
                                     {{ number_format($cartItem->article->price, 2) }} €
                                 </p>
+                            @endif
+                            
                             </div>
 
                             <div class="d-flex gap-2 align-items-center flex-wrap">
@@ -74,8 +84,9 @@
 
             <div class="mt-4 text-end">
                 <h5 class="fw-bold text-success">
-                    Totale: {{ number_format($cartItems->sum(fn($item) => $item->article->price * $item->quantity), 2) }} €
+                    Totale: {{ number_format($cartItems->sum(fn($item) => (($item->article->price - $item->article->discount) > 0 ? ($item->article->price - $item->article->discount) : $item->article->price) * $item->quantity), 2) }} €
                 </h5>
+                
                 <a href="{{ route('checkout.summary') }}" class="btn-custom mt-2">Procedi al pagamento</a>
             </div>
         @else

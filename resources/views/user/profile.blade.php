@@ -88,9 +88,19 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($orders as $order)
+                                        @php
+                                            // Calcolo del totale considerando lo sconto per ogni articolo
+                                            $total = 0;
+                                            foreach ($order->items as $item) {
+                                                $price = $item->article->price ?? 0;
+                                                $discount = $item->article->discount ?? 0;
+                                                $quantity = $item->quantity ?? 1;
+                                                $total += ($price - $discount) * $quantity;
+                                            }
+                                        @endphp
                                         <tr>
                                             <td>{{ $order->id }}</td>
-                                            <td>€ {{ number_format($order->total_amount, 2, ',', '.') }}</td>
+                                            <td>€ {{ number_format($total, 2, ',', '.') }}</td>
                                             <td>
                                                 <span
                                                     class="badge

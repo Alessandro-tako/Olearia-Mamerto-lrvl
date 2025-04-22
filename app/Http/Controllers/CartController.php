@@ -19,8 +19,12 @@ class CartController extends Controller
     // Aggiungi un articolo al carrello
     public function add(Article $article)
     {
+        // Verifica se c'è uno sconto e calcola il prezzo scontato
+        $price = $article->price - $article->discount;  // Sottrai lo sconto dal prezzo originale
+    
+        // Verifica se l'articolo è già presente nel carrello
         $cartItem = Cart::where('user_id', Auth::id())->where('article_id', $article->id)->first();
-
+    
         if ($cartItem) {
             // Se l'articolo esiste già nel carrello, aumenta la quantità
             $cartItem->increment('quantity');
@@ -29,12 +33,14 @@ class CartController extends Controller
             Cart::create([
                 'user_id' => Auth::id(),
                 'article_id' => $article->id,
-                'quantity' => 1
+                'quantity' => 1,
+                'price' => $price, // Memorizza il prezzo scontato
             ]);
         }
-
-        return redirect()->back()->with('message', "hai aggiunto l'articolo al tuo carrello");
+    
+        return redirect()->back()->with('message', "Hai aggiunto l'articolo al tuo carrello");
     }
+    
 
     // Rimuovi un articolo dal carrello
     public function remove($cartId)

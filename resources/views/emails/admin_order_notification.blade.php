@@ -1,36 +1,59 @@
-<x-email-layout>
-    <section class="container my-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header form-custom">
-                        <h3 class="text-center card-title fs-2 custom-link1">📦 Nuovo ordine ricevuto</h3>
-                    </div>
-                    <div class="card-body">
-                        <h1>Ciao {{ $admin->name }},</h1>
-                        <p>L'utente <strong>{{ $order->user->name }}</strong> ha appena effettuato un ordine!</p>
-                        <p>Numero ordine: <strong>#{{ $order->id }}</strong></p>
-                        <p>Totale: <strong>€{{ number_format($order->total_amount, 2) }}</strong></p>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Nuovo Ordine Ricevuto</title>
+</head>
+<body style="background-color: black; color: black; padding: 2rem; font-family: Arial, sans-serif;">
+    <div style="max-width: 600px; margin: 0 auto; background-color: white; border-radius: 10px; padding: 2rem; box-shadow: 0 0 10px rgba(0,255,128,0.1);">
+        <h2 style="text-align: center; color: #55b605; font-size: 28px; font-weight: bold; margin-bottom: 1.5rem; margin-top: 1.5rem;">📦 Nuovo ordine ricevuto</h2>
 
-                        <ul>
-                            @foreach($order->items as $item)
-                                <li>{{ $item->quantity }} x {{ $item->article->title }} - €{{ $item->price }}</li>
-                            @endforeach
-                        </ul>
+        <p style="font-size: 18px;">Ciao <strong style="color: #228b22;">{{ $admin->name }}</strong>,</p>
 
-                        <p><a class="text-decoration-none" href="{{ route('admin.orders') }}">🔎 Visualizza ordine nel pannello admin</a></p>
+        <p style="font-size: 16px; line-height: 1.5;">
+            L'utente <strong>{{ $order->user->name }}</strong> ha appena effettuato un ordine!
+        </p>
+        <p style="font-size: 16px; line-height: 1.5;">
+            Numero ordine: <strong>#{{ $order->id }}</strong>
+        </p>
+        
+        <!-- Calcolo del totale dell'ordine con sconto -->
+        @php
+            $total = 0;
+            foreach ($order->items as $item) {
+                $price = $item->price ?? 0;
+                $discount = $item->discount ?? 0;
+                $quantity = $item->quantity ?? 1;
+                $total += ($price - $discount) * $quantity;
+            }
+        @endphp
+        
+        <p style="font-size: 16px; line-height: 1.5;">
+            Totale: <strong>€{{ number_format($total, 2, ',', '.') }}</strong>
+        </p>
 
-                        <p>Grazie,</p>
-                        <p>{{ config('app.name') }}</p>
-                        <p style="font-size: 0.875rem; color: #666; margin-top: 1rem;">
-                            Questa email è stata generata automaticamente, ti chiediamo di non rispondere direttamente a
-                            questo messaggio.<br>
-                            Per qualsiasi richiesta o supporto, visita la nostra <a href="{{ route('contacts')}}"
-                                style="color: #D4AF37; text-decoration: none;">pagina contatti</a>.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</x-email-layout>
+        <ul style="font-size: 16px; line-height: 1.5;">
+            @foreach($order->items as $item)
+                <li>{{ $item->quantity }} x {{ $item->article->title }} - €{{ number_format($item->price - $item->discount, 2, ',', '.') }}</li>
+            @endforeach
+        </ul>
+
+        <p style="font-size: 16px; text-align: center;">
+            <a href="{{ route('admin.orders') }}" style="background-color: #228b22; color: white; padding: 12px 24px; border-radius: 50px; text-decoration: none; font-weight: bold;">
+                🔎 Visualizza ordine nel pannello admin
+            </a>
+        </p>
+
+        <p style="font-size: 16px;">Grazie,</p>
+        <p style="font-size: 16px;">{{ config('app.name') }}</p>
+
+        <p style="font-size: 12px; color: #aaa; margin-top: 2rem;">
+            Questa email è stata generata automaticamente, ti chiediamo di non rispondere direttamente a questo messaggio.<br>
+            Per qualsiasi richiesta o supporto, visita la nostra 
+            <a href="{{ route('contacts')}}" style="color: green; text-decoration: none;">pagina contatti</a>.
+        </p>
+    </div>
+</body>
+</html>

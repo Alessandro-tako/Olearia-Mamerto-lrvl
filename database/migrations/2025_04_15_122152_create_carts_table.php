@@ -18,6 +18,7 @@ class CreateCartsTable extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('article_id')->constrained()->onDelete('cascade');
             $table->integer('quantity')->default(1);  // La quantità dell'articolo nel carrello
+            $table->decimal('price', 8, 2); // Prezzo dell'articolo (scontato o originale)
             $table->timestamps();
         });
     }   

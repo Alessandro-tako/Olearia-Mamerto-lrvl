@@ -6,8 +6,9 @@
     <x-success-message />
 
     <main class="container mt-4">
+        <!-- Form per la ricerca degli ordini -->
         <form method="GET" action="{{ route('admin.orders') }}" class="mb-4 text-start">
-            <label for="search" class="form-label text-white">Cerca ordini (ID, email, stato):</label>
+            <label for="search" class="form-label text-white">Cerca ordini (#ID, email, stato):</label>
             <div class="input-group">
                 <input type="text" name="search" id="search" class="form-control"
                     value="{{ request('search') }}" placeholder="es: mario@rossi.it o 123">
@@ -30,7 +31,21 @@
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-12 col-md-4">
-                            <p class="mb-1"><strong>Totale:</strong> €{{ number_format($order->total_amount, 2, ',', '.') }}</p>
+                            @php
+                                // Calcolo del totale considerando lo sconto per ogni articolo
+                                $total = 0;
+                                foreach ($order->items as $item) {
+                                    $price = $item->article->price ?? 0;
+                                    $discount = $item->article->discount ?? 0;
+                                    $quantity = $item->quantity ?? 1;
+                                    $total += ($price - $discount) * $quantity;
+                                }
+                            @endphp
+
+                            <!-- Mostra il totale corretto -->
+                            <p class="mb-1"><strong>Totale:</strong> €{{ number_format($total, 2, ',', '.') }}</p>
+
+                            <!-- Badge con lo stato -->
                             <p class="mb-1">
                                 <strong>Stato:</strong>
                                 @if ($order->user)
@@ -45,14 +60,14 @@
                                         {{ $order->status }}
                                     </span>
                                 @else
-                                    <!-- Badge rosso con scritto "Eliminato" se l'utente è eliminato -->
                                     <span class="badge bg-danger text-white">Eliminato</span>
                                 @endif
                             </p>
                         </div>
 
+                        <!-- Form per aggiornare lo stato ordine -->
                         <div class="col-12 col-md-8 text-end">
-                            @if ($order->user)  <!-- Verifica che l'utente non sia stato eliminato -->
+                            @if ($order->user)
                                 <form action="{{ route('order.update.status', $order->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('PATCH')
@@ -67,20 +82,21 @@
                                     </div>
                                 </form>
                             @else
-                                <!-- Disabilita il campo select e il pulsante di aggiornamento se l'utente è stato eliminato -->
                                 <p class="text-muted">Non puoi modificare lo stato dell'ordine perché l'utente è stato eliminato.</p>
                             @endif
                         </div>
                     </div>
 
+                    <!-- Bottone per mostrare/nascondere i dettagli -->
                     <button class="btn btn-sm btn-outline-dark mb-2" data-bs-toggle="collapse" data-bs-target="#details-{{ $order->id }}">
                         Dettagli ordine
                     </button>
 
                     <div class="collapse" id="details-{{ $order->id }}">
                         <div class="row mt-3">
+                            <!-- Indirizzo di spedizione -->
                             <div class="col-md-6">
-                                @if ($order->user && $order->user->shippingAddress) <!-- Verifica che l'utente e l'indirizzo esistano -->
+                                @if ($order->user && $order->user->shippingAddress)
                                     <h6 class="textColor">📍 Indirizzo di Spedizione:</h6>
                                     <ul class="list-unstyled small">
                                         <li><strong>Nome:</strong> {{ $order->user->shippingAddress->first_name }} {{ $order->user->shippingAddress->last_name }}</li>
@@ -94,12 +110,27 @@
                                     <p class="text-muted">Indirizzo non disponibile.</p>
                                 @endif
                             </div>
+
+                            <!-- Articoli ordinati -->
                             <div class="col-md-6">
                                 <h6 class="textColor">📦 Articoli ordinati:</h6>
                                 <ul class="list-unstyled small">
                                     @foreach ($order->items as $item)
                                         <li>
-                                            • <strong>{{ $item->article->title }}</strong> – Q.tà: {{ $item->quantity }} – €{{ number_format($item->price, 2, ',', '.') }}
+                                            • <strong>{{ $item->article->title }}</strong> – Q.tà: {{ $item->quantity }} –
+                                            @if ($item->article->discount > 0)
+                                                <!-- Prezzo barrato e prezzo scontato -->
+                                                <span class="text-decoration-line-through text-muted">
+                                                    €{{ number_format($item->article->price, 2, ',', '.') }}
+                                                </span>
+                                                <span class="ms-1 text-success fw-semibold">
+                                                    €{{ number_format($item->article->price - $item->article->discount, 2, ',', '.') }}
+                                                </span>
+                                            @else
+                                                <span class="fw-semibold">
+                                                    €{{ number_format($item->article->price, 2, ',', '.') }}
+                                                </span>
+                                            @endif
                                         </li>
                                     @endforeach
                                 </ul>

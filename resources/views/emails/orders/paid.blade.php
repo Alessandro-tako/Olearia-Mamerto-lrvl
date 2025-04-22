@@ -36,8 +36,19 @@
             @endforeach
         </ul>
 
-        <p style="font-size: 16px; line-height: 1.5;">Totale: €{{ number_format($order->total_amount, 2) }}</p>
-
+        <p style="font-size: 16px; line-height: 1.5;">Totale: 
+            @if($order->total_discount > 0)
+                <span style="text-decoration: line-through; color: red;">
+                    €{{ number_format($order->total_amount, 2) }}
+                </span> 
+                <span style="color: #228b22;">
+                    €{{ number_format($order->total_amount - $order->total_discount, 2) }}
+                </span>
+            @else
+                €{{ number_format($order->total_amount, 2) }}
+            @endif
+        </p>
+        
 
         <p style="font-size: 16px; line-height: 1.5;">Ti avviseremo quando il tuo ordine sarà confermato e in fase di preparazione.</p>
 

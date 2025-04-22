@@ -19,7 +19,7 @@
             <li><strong>ID Ordine:</strong> {{ $order->id }}</li>
             <li><strong>Nome Cliente:</strong> {{ $order->user->name }}</li>
             <li><strong>Email Cliente:</strong> {{ $order->user->email }}</li>
-            <li><strong>Totale Ordine:</strong> €{{ number_format($order->total, 2) }}</li>
+            <li><strong>Totale Ordine:</strong> €{{ $order->total }}</li>
         </ul>
 
         <p style="font-size: 16px; line-height: 1.5;">Ecco i dettagli dei prodotti acquistati:</p>
@@ -52,7 +52,7 @@
         <p style="font-size: 12px; color: #aaa; margin-top: 2rem;">
             Questa email è stata generata automaticamente, ti chiediamo di non rispondere direttamente a questo messaggio.<br>
             Per qualsiasi richiesta o supporto, visita la nostra 
-            <a href="{{ route('contacts')}}" style="color: #228b22; text-decoration: none;">pagina contatti</a>.<br>
+            <a href="{{ route('contacts')}}" style="color: #228b22; text-decoration: none;">pagina contatti</a>.
         </p>
     </div>
 </body>

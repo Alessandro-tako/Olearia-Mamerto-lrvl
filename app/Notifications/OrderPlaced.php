@@ -23,7 +23,7 @@ class OrderPlaced extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject('Conferma del tuo ordine')
+                    ->subject('🎉Conferma di avvenuto pagamento')
                     ->view('emails.orders.paid', [
                         'order' => $this->order,
                     ]);

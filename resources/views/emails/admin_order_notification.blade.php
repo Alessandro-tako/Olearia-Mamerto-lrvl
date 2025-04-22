@@ -18,25 +18,36 @@
         <p style="font-size: 16px; line-height: 1.5;">
             Numero ordine: <strong>#{{ $order->id }}</strong>
         </p>
-        
-        <!-- Calcolo del totale dell'ordine con sconto -->
-        @php
-            $total = 0;
-            foreach ($order->items as $item) {
-                $price = $item->price ?? 0;
-                $discount = $item->discount ?? 0;
-                $quantity = $item->quantity ?? 1;
-                $total += ($price - $discount) * $quantity;
-            }
-        @endphp
-        
+
         <p style="font-size: 16px; line-height: 1.5;">
-            Totale: <strong>€{{ number_format($total, 2, ',', '.') }}</strong>
+            Totale: 
+            @if($order->total_discount > 0)
+                <span style="text-decoration: line-through; color: red;">
+                    €{{ number_format($order->total_amount, 2) }}
+                </span> 
+                <span style="color: #228b22;">
+                    €{{ number_format($order->total_amount - $order->total_discount, 2) }}
+                </span>
+            @else
+                €{{ number_format($order->total_amount, 2) }}
+            @endif
         </p>
 
         <ul style="font-size: 16px; line-height: 1.5;">
             @foreach($order->items as $item)
-                <li>{{ $item->quantity }} x {{ $item->article->title }} - €{{ number_format($item->price - $item->discount, 2, ',', '.') }}</li>
+                <li>
+                    {{ $item->quantity }} x {{ $item->article->title }} - 
+                    @if($item->article->discount > 0)
+                        <span style="text-decoration: line-through; color: red;">
+                            €{{ number_format($item->article->price, 2) }}
+                        </span> 
+                        <span style="color: #228b22;">
+                            €{{ number_format($item->article->price - $item->article->discount, 2) }}
+                        </span>
+                    @else
+                        €{{ number_format($item->article->price, 2) }}
+                    @endif
+                </li>
             @endforeach
         </ul>
 

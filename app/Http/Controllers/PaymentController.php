@@ -61,7 +61,7 @@ class PaymentController extends Controller
             'purchase_units' => [[
                 'amount' => [
                     'currency_code' => 'EUR',
-                    'value' => number_format($total, 2, '.', ''),
+                    'value' => number_format($total, 2, '.', ''),  // Totale con sconto
                 ],
                 'shipping' => [
                     'name' => [
@@ -94,95 +94,105 @@ class PaymentController extends Controller
         return redirect()->away($approveLink);
     }
 
-    public function success(Request $request)
-    {
-        $token = $request->get('token');
 
-        $tokenResponse = Http::asForm()->withBasicAuth(
-            config('paypal.sandbox.client_id'),
-            config('paypal.sandbox.client_secret')
-        )->post('https://api-m.sandbox.paypal.com/v1/oauth2/token', [
-            'grant_type' => 'client_credentials',
+    public function success(Request $request)
+{
+    $token = $request->get('token');
+
+    // Ottenere il token di accesso PayPal
+    $tokenResponse = Http::asForm()->withBasicAuth(
+        config('paypal.sandbox.client_id'),
+        config('paypal.sandbox.client_secret')
+    )->post('https://api-m.sandbox.paypal.com/v1/oauth2/token', [
+        'grant_type' => 'client_credentials',
+    ]);
+
+    if (!$tokenResponse->successful()) {
+        Log::error('❌ Errore PayPal (token success): ' . $tokenResponse->body());
+        return redirect()->route('cart.show')->with('message', 'Errore durante la conferma del pagamento.');
+    }
+
+    $accessToken = $tokenResponse->json()['access_token'];
+
+    // Recupera i dati dell'ordine da PayPal
+    $orderResponse = Http::withToken($accessToken)->get("https://api-m.sandbox.paypal.com/v2/checkout/orders/{$token}");
+    $orderData = $orderResponse->json();
+    $payerId = $orderData['payer']['payer_id'] ?? null;
+
+    if (!$payerId) {
+        Log::error('❌ Payer ID non trovato nella risposta dell\'ordine PayPal: ' . json_encode($orderData));
+        return redirect()->route('cart.show')->with('message', 'Impossibile completare il pagamento.');
+    }
+
+    // Cattura il pagamento
+    $capture = Http::withToken($accessToken)
+        ->post("https://api-m.sandbox.paypal.com/v2/checkout/orders/{$token}/capture", [
+            'payer_id' => $payerId,
         ]);
 
-        if (!$tokenResponse->successful()) {
-            Log::error('❌ Errore PayPal (token success): ' . $tokenResponse->body());
-            return redirect()->route('cart.show')->with('message', 'Errore durante la conferma del pagamento.');
-        }
+    $data = $capture->json();
+    Log::info('✅ Risposta Capture PayPal: ' . json_encode($data));
 
-        $accessToken = $tokenResponse->json()['access_token'];
+    $isCompleted = false;
 
-        $orderResponse = Http::withToken($accessToken)->get("https://api-m.sandbox.paypal.com/v2/checkout/orders/{$token}");
-        $orderData = $orderResponse->json();
-        $payerId = $orderData['payer']['payer_id'] ?? null;
-
-        if (!$payerId) {
-            Log::error('❌ Payer ID non trovato nella risposta dell\'ordine PayPal: ' . json_encode($orderData));
-            return redirect()->route('cart.show')->with('message', 'Impossibile completare il pagamento.');
-        }
-
-        $capture = Http::withToken($accessToken)
-            ->post("https://api-m.sandbox.paypal.com/v2/checkout/orders/{$token}/capture", [
-                'payer_id' => $payerId,
-            ]);
-
-        $data = $capture->json();
-        Log::info('✅ Risposta Capture PayPal: ' . json_encode($data));
-
-        $isCompleted = false;
-
-        if (isset($data['status']) && $data['status'] === 'COMPLETED') {
-            $isCompleted = true;
-        }
-
-        if (!$isCompleted && isset($data['purchase_units'][0]['payments']['captures'][0]['status'])) {
-            $isCompleted = $data['purchase_units'][0]['payments']['captures'][0]['status'] === 'COMPLETED';
-        }
-
-        if ($isCompleted) {
-            $user = Auth::user();
-            $order = Order::create([
-                'user_id' => $user->id,
-                'total_amount' => $this->calculateTotalAmount($user->id),
-            ]);
-
-            $cartItems = Cart::where('user_id', $user->id)->with('article')->get();
-
-            foreach ($cartItems as $item) {
-                if ($item->article->stock < $item->quantity) {
-                    Log::error("❌ Stock insufficiente per l'articolo ID: {$item->article_id}");
-                    return redirect()->route('cart.show')->with('message', 'Stock insufficiente per uno o più articoli.');
-                }
-
-                $item->article->stock -= $item->quantity;
-                $item->article->save();
-
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'article_id' => $item->article_id,
-                    'quantity' => $item->quantity,
-                    'price' => $item->article->price,
-                ]);
-            }
-
-            // Notifica all'utente
-            $user->notify(new OrderPlaced($order));
-
-            // Notifica a tutti gli admin
-            $admins = User::where('is_admin', true)->get();
-            foreach ($admins as $admin) {
-                $admin->notify(new NewOrderAdminNotification($order));
-            }
-
-            // Pulisci il carrello dell'utente
-            Cart::where('user_id', $user->id)->delete();
-
-            return redirect()->route('orders.index')->with('message', 'Pagamento completato con successo!');
-        }
-
-        Log::error('❌ Pagamento non completato: ' . json_encode($data));
-        return redirect()->route('cart.show')->with('message', 'Errore durante il pagamento.');
+    if (isset($data['status']) && $data['status'] === 'COMPLETED') {
+        $isCompleted = true;
     }
+
+    if (!$isCompleted && isset($data['purchase_units'][0]['payments']['captures'][0]['status'])) {
+        $isCompleted = $data['purchase_units'][0]['payments']['captures'][0]['status'] === 'COMPLETED';
+    }
+
+    if ($isCompleted) {
+        $user = Auth::user();
+
+        // Calcolare il totale scontato per l'ordine
+        $cartItems = Cart::where('user_id', $user->id)->with('article')->get();
+        $totalAmount = $cartItems->sum(fn($item) => ($item->article->price - $item->article->discount) * $item->quantity);
+
+        // Creare l'ordine
+        $order = Order::create([
+            'user_id' => $user->id,
+            'total_amount' => $totalAmount, // Totale scontato
+        ]);
+
+        foreach ($cartItems as $item) {
+            if ($item->article->stock < $item->quantity) {
+                Log::error("❌ Stock insufficiente per l'articolo ID: {$item->article_id}");
+                return redirect()->route('cart.show')->with('message', 'Stock insufficiente per uno o più articoli.');
+            }
+
+            $item->article->stock -= $item->quantity;
+            $item->article->save();
+
+            OrderItem::create([
+                'order_id' => $order->id,
+                'article_id' => $item->article_id,
+                'quantity' => $item->quantity,
+                'price' => $item->article->price,
+            ]);
+        }
+
+        // Notifica all'utente con il totale scontato
+        $user->notify(new OrderPlaced($order, $totalAmount));
+
+        // Notifica a tutti gli admin con il totale scontato
+        $admins = User::where('is_admin', true)->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new NewOrderAdminNotification($order, $totalAmount));
+        }
+
+        // Pulisci il carrello dell'utente
+        Cart::where('user_id', $user->id)->delete();
+
+        return redirect()->route('orders.index')->with('message', 'Pagamento completato con successo!');
+    }
+
+    Log::error('❌ Pagamento non completato: ' . json_encode($data));
+    return redirect()->route('cart.show')->with('message', 'Errore durante il pagamento.');
+}
+
+
 
     private function calculateTotalAmount($userId)
     {

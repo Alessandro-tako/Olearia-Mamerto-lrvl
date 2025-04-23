@@ -10,10 +10,18 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->decimal('total_amount', 8, 2);  // Importo totale dell'ordine
-            // Impostiamo 'paid' come valore predefinito, e aggiungiamo 'confirmed' e 'shipped'
-            $table->enum('status', ['Pagato e in attesa', 'Confermato', 'Spedito', 'cancellato'])->default('Pagato e in attesa');
+
+            // Collegamento opzionale all'utente
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null'); // Modifica onDelete()
+
+            // Snapshot dati utente
+            $table->string('user_name')->nullable();
+            $table->string('user_email')->nullable();
+
+            $table->decimal('total_amount', 8, 2);
+
+            $table->enum('status', ['Pagato e in attesa', 'Confermato', 'Spedito', 'Cancellato'])->default('Pagato e in attesa');
+
             $table->timestamps();
         });
     }

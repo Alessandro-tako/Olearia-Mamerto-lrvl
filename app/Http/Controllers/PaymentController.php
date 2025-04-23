@@ -29,70 +29,81 @@ class PaymentController extends Controller
     }
 
     public function checkout()
-    {
-        $cartItems = Cart::where('user_id', Auth::id())->with('article')->get();
+{
+    $cartItems = Cart::where('user_id', Auth::id())->with('article')->get();
 
-        if ($cartItems->isEmpty()) {
-            return redirect()->route('cart.show')->with('message', 'Il carrello è vuoto!');
-        }
-
-        // Calcolare il totale scontato
-        $total = $cartItems->sum(fn($item) => ($item->article->price - $item->article->discount) * $item->quantity);
-
-        $tokenResponse = Http::asForm()->withBasicAuth(
-            config('paypal.sandbox.client_id'),
-            config('paypal.sandbox.client_secret')
-        )->post('https://api-m.sandbox.paypal.com/v1/oauth2/token', [
-            'grant_type' => 'client_credentials',
-        ]);
-
-        if (!$tokenResponse->successful()) {
-            Log::error('❌ Errore PayPal (token): ' . $tokenResponse->body());
-            return redirect()->route('cart.show')->with('message', 'Errore nell\'ottenere il token di accesso.');
-        }
-
-        $accessToken = $tokenResponse->json()['access_token'];
-
-        // Recupera indirizzo di spedizione dell'utente
-        $shipping = ShippingAddress::where('user_id', Auth::id())->latest()->first();
-
-        $orderResponse = Http::withToken($accessToken)->post('https://api-m.sandbox.paypal.com/v2/checkout/orders', [
-            'intent' => 'CAPTURE',
-            'purchase_units' => [[
-                'amount' => [
-                    'currency_code' => 'EUR',
-                    'value' => number_format($total, 2, '.', ''),  // Totale con sconto
-                ],
-                'shipping' => [
-                    'name' => [
-                        'full_name' => $shipping->first_name . ' ' . $shipping->last_name,
-                    ],
-                    'address' => [
-                        'address_line_1' => $shipping->address ?? 'Indirizzo mancante',
-                        'admin_area_2' => $shipping->city ?? '',
-                        'postal_code' => $shipping->postal_code ?? '',
-                        'country_code' => 'IT',
-                    ],
-                ],
-            ]],
-            'application_context' => [
-                'return_url' => route('payment.success'),
-                'cancel_url' => route('payment.cancel'),
-            ],
-        ]);
-
-        $orderData = $orderResponse->json();
-        Log::info('🧾 PayPal order response: ' . json_encode($orderData));
-
-        $approveLink = collect($orderData['links'])->firstWhere('rel', 'approve')['href'] ?? null;
-
-        if (!$approveLink) {
-            Log::error('❌ Link di approvazione non trovato: ' . json_encode($orderData));
-            return redirect()->route('shipping.update')->with('message', 'Impossibile procedere al pagamento, inserisci il tuo indirizzo.');
-        }
-
-        return redirect()->away($approveLink);
+    if ($cartItems->isEmpty()) {
+        return redirect()->route('cart.show')->with('message', 'Il carrello è vuoto!');
     }
+
+    // Calcolare il totale scontato
+    $total = $cartItems->sum(fn($item) => ($item->article->price - $item->article->discount) * $item->quantity);
+
+    $tokenResponse = Http::asForm()->withBasicAuth(
+        config('paypal.sandbox.client_id'),
+        config('paypal.sandbox.client_secret')
+    )->post('https://api-m.sandbox.paypal.com/v1/oauth2/token', [
+        'grant_type' => 'client_credentials',
+    ]);
+
+    if (!$tokenResponse->successful()) {
+        Log::error('❌ Errore PayPal (token): ' . $tokenResponse->body());
+        return redirect()->route('cart.show')->with('message', 'Errore nell\'ottenere il token di accesso.');
+    }
+
+    $accessToken = $tokenResponse->json()['access_token'];
+
+    // Recupera indirizzo di spedizione dell'utente
+    $shipping = ShippingAddress::where('user_id', Auth::id())->latest()->first();
+
+    // Verifica se l'indirizzo di spedizione esiste
+    if (!$shipping) {
+        return redirect()->route('shipping.update')->with('message', 'Per procedere al pagamento, inserisci il tuo indirizzo di spedizione.');
+    }
+
+    // Controlla se first_name o last_name sono null
+    if (is_null($shipping->first_name) || is_null($shipping->last_name)) {
+        return redirect()->route('shipping.update')->with('message', 'Per procedere al pagamento, inserisci il tuo nome e cognome.');
+    }
+
+    $orderResponse = Http::withToken($accessToken)->post('https://api-m.sandbox.paypal.com/v2/checkout/orders', [
+        'intent' => 'CAPTURE',
+        'purchase_units' => [[
+            'amount' => [
+                'currency_code' => 'EUR',
+                'value' => number_format($total, 2, '.', ''),  // Totale con sconto
+            ],
+            'shipping' => [
+                'name' => [
+                    'full_name' => $shipping->first_name . ' ' . $shipping->last_name,
+                ],
+                'address' => [
+                    'address_line_1' => $shipping->address ?? 'Indirizzo mancante',
+                    'admin_area_2' => $shipping->city ?? '',
+                    'postal_code' => $shipping->postal_code ?? '',
+                    'country_code' => 'IT',
+                ],
+            ],
+        ]],
+        'application_context' => [
+            'return_url' => route('payment.success'),
+            'cancel_url' => route('payment.cancel'),
+        ],
+    ]);
+
+    $orderData = $orderResponse->json();
+    Log::info('🧾 PayPal order response: ' . json_encode($orderData));
+
+    $approveLink = collect($orderData['links'])->firstWhere('rel', 'approve')['href'] ?? null;
+
+    if (!$approveLink) {
+        Log::error('❌ Link di approvazione non trovato: ' . json_encode($orderData));
+        return redirect()->route('shipping.update')->with('message', 'Impossibile procedere al pagamento, inserisci il tuo indirizzo.');
+    }
+
+    return redirect()->away($approveLink);
+}
+
 
 
     public function success(Request $request)

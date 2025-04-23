@@ -105,10 +105,10 @@
                                                 <span
                                                     class="badge
                                                     @switch($order->status)
-                                                        @case('Pagato e in attesa') bg-secondary @break
+                                                        @case('Pagato e in attesa') bg-info @break
                                                         @case('Confermato') bg-warning text-dark @break
                                                         @case('Spedito') bg-success @break
-                                                        @case('cancellato') bg-danger @break
+                                                        @case('Cancellato') bg-danger @break
                                                         @default bg-light text-dark
                                                     @endswitch">
                                                     {{ $order->status }}

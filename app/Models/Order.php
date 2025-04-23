@@ -7,16 +7,26 @@ use App\Models\OrderItem;
 use Laravel\Scout\Searchable;
 use App\Models\ShippingAddress;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Order extends Model
 {
     use Searchable;
     
-    protected $fillable = ['user_id', 'total_amount', 'status'];
+    protected $fillable = [
+        'user_id',
+        'user_name',
+        'user_email',
+        'total_amount',
+        'status',
+    ];
 
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withDefault([
+            'name' => $this->user_name,  // Nome utente personalizzato
+            'email' => $this->user_email, // Email utente personalizzato
+        ]);
     }
 
     public function items()

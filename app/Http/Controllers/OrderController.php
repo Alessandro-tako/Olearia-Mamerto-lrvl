@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Order;
-use App\Models\ShippingAddress;
 use App\Mail\OrderPaidMail;
-use App\Mail\OrderConfirmedMail;
-use App\Mail\OrderShippedMail;
-use App\Mail\OrderCancelledMail;
 use Illuminate\Http\Request;
+use App\Mail\OrderShippedMail;
+use App\Models\ShippingAddress;
+use App\Mail\OrderCancelledMail;
+use App\Mail\OrderConfirmedMail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -59,49 +60,72 @@ class OrderController extends Controller
         return $total;
     }
 
-    // Modifica lo stato di un ordine (solo per admin)
+    public function deleteUser(User $user)
+    {
+        // Elimina l'utente
+        $user->delete();
+
+        // Aggiorna lo stato degli ordini associati a questo utente
+        Order::where('user_id', $user->id)
+            ->update(['status' => 'Utente eliminato']);
+
+        // Puoi anche considerare di aggiornare lo stato in altri luoghi se necessario
+    }
+
     public function updateStatus(Request $request, Order $order)
     {
         // Verifica che l'utente sia un amministratore
         if (!Auth::user()->is_admin) {
             return redirect()->route('home')->with('error', 'Non hai permessi per modificare lo stato dell\'ordine.');
         }
-
+    
+        // Se l'ordine è associato a un utente eliminato, non permettere modifiche
+        if ($order->user === null) {
+            return redirect()->back()->with('error', 'Non puoi modificare lo stato dell\'ordine perché l\'utente è stato eliminato.');
+        }
+    
         // Validazione dello stato
         $validated = $request->validate([
-            'status' => 'required|in:Pagato e in attesa,Confermato,Spedito,cancellato',
+            'status' => 'required|in:Pagato e in attesa,Confermato,Spedito,cancellato,Utente eliminato',
         ]);
-
+    
         // Calcolare il totale dell'ordine con lo sconto in valore assoluto
         $total = $this->calculateOrderTotal($order);
-
-        // Aggiorna lo stato dell'ordine
-        $order->status = $request->input('status');
-        $order->save();
-
-        // Invia l'email in base allo stato
+    
+        // Se lo stato è "Utente eliminato", aggiorna lo stato e invia l'email
+        if ($request->input('status') === 'Utente eliminato') {
+            // Imposta lo stato dell'ordine a "Utente eliminato"
+            $order->status = 'Utente eliminato';
+            $order->save();
+    
+            // Invia l'email per avvisare l'utente dell'eliminazione
+            Mail::to($order->user->email)->send(new OrderDeletedMail($order, $total));
+    
+            return redirect()->back()->with('success', 'Stato aggiornato a "Utente eliminato" e l\'email è stata inviata.');
+        }
+    
+        // Se lo stato è valido, aggiorna lo stato e invia le email
         switch ($order->status) {
             case 'Pagato e in attesa':
-                // Invia email di acquisto con il totale dell'ordine
                 Mail::to($order->user->email)->send(new OrderPaidMail($order, $total));
                 break;
-
+    
             case 'Confermato':
-                // Invia email di conferma con il totale dell'ordine
                 Mail::to($order->user->email)->send(new OrderConfirmedMail($order, $total));
                 break;
-
+    
             case 'Spedito':
-                // Invia email di spedizione con il totale dell'ordine
                 Mail::to($order->user->email)->send(new OrderShippedMail($order, $total));
                 break;
-
+    
             case 'cancellato':
-                // Invia email di annullamento con il totale dell'ordine
                 Mail::to($order->user->email)->send(new OrderCancelledMail($order, $total));
                 break;
         }
-
+    
         return redirect()->back()->with('success', 'Stato aggiornato con successo!');
     }
+    
+
+
 }

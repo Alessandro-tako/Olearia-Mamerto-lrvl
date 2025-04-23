@@ -48,8 +48,13 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
+        // Prima cancelliamo la tabella sessions (con FK a users)
         Schema::dropIfExists('sessions');
+        
+        // Poi cancelliamo la tabella password_reset_tokens
+        Schema::dropIfExists('password_reset_tokens');
+
+        // Infine cancelliamo la tabella users
+        Schema::dropIfExists('users');
     }
 };

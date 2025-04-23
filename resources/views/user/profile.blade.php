@@ -97,22 +97,45 @@
                                                 $quantity = $item->quantity ?? 1;
                                                 $total += ($price - $discount) * $quantity;
                                             }
+
+                                            // Calcolo della percentuale della barra di avanzamento
+                                            $progress = 0;
+                                            $statusClass = '';
+                                            switch ($order->status) {
+                                                case 'Pagato e in attesa':
+                                                    $progress = 25;
+                                                    $statusClass = 'bg-info';
+                                                    break;
+                                                case 'Confermato':
+                                                    $progress = 75;
+                                                    $statusClass = 'bg-warning';
+                                                    break;
+                                                case 'Spedito':
+                                                    $progress = 100;
+                                                    $statusClass = 'bg-success';
+                                                    break;
+                                                case 'Cancellato':
+                                                    $progress = 0;
+                                                    $statusClass = 'bg-danger';
+                                                    break;
+                                                default:
+                                                    $progress = 0;
+                                                    $statusClass = 'bg-light text-dark';
+                                            }
                                         @endphp
                                         <tr>
                                             <td>{{ $order->id }}</td>
                                             <td>€ {{ number_format($total, 2, ',', '.') }}</td>
                                             <td>
-                                                <span
-                                                    class="badge
-                                                    @switch($order->status)
-                                                        @case('Pagato e in attesa') bg-info @break
-                                                        @case('Confermato') bg-warning text-dark @break
-                                                        @case('Spedito') bg-success @break
-                                                        @case('Cancellato') bg-danger @break
-                                                        @default bg-light text-dark
-                                                    @endswitch">
+                                                <span class="badge {{ $statusClass }}">
                                                     {{ $order->status }}
                                                 </span>
+                                                <!-- Barra di progresso accanto allo stato -->
+                                                <div class="progress mt-2" style="height: 6px;">
+                                                    <div class="progress-bar {{ $statusClass }}" role="progressbar"
+                                                        style="width: {{ $progress }}%;" aria-valuenow="{{ $progress }}"
+                                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
                                             </td>
                                             <td>{{ $order->created_at->format('d/m/Y') }}</td>
                                         </tr>

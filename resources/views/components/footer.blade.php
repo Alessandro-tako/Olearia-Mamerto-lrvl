@@ -3,17 +3,17 @@
     <div class="container px-0">
         <div class="row justify-content-evenly">
             <!-- Colonna informazioni contatti -->
-            <div class="col-12 col-md-4 mb-4">
+            <div class="col-12 col-md-4 mb-4 text-center text-md-start">
                 <h5 class="textColor mb-3">Contatti</h5>
                 <ul class="list-unstyled">
                     <li><i class="bi bi-geo-alt-fill"></i> Oppido Mamertina (RC), Italia</li>
-                    <li><i class="bi bi-envelope-fill"></i> info@oleariamamerto.com</li>
-                    <li><i class="bi bi-phone-fill"></i> +39 123 456 789</li>
+                    <li><i class="bi bi-envelope-fill"></i> oleariamamerto@gmail.com</li>
+                    <li><i class="bi bi-phone-fill"></i> +39 096686033</li>
                 </ul>
             </div>
 
             <!-- Colonna link veloci -->
-            <div class="col-12 col-md-4 mb-4">
+            <div class="col-12 col-md-4 mb-4 text-center text-md-start">
                 <h5 class="textColor mb-3">Link Veloci</h5>
                 <ul class="list-unstyled">
                     <li><a href="{{ route('homepage') }}" class="text-white text-decoration-none">Home</a></li>
@@ -24,9 +24,9 @@
             </div>
 
             <!-- Colonna social media -->
-            <div class="col-12 col-md-4 mb-4">
+            <div class="col-12 col-md-4 mb-4 text-center text-md-start">
                 <h5 class="textColor mb-3">Seguici</h5>
-                <div class="d-flex">
+                <div class="d-flex justify-content-center justify-content-md-start">
                     <a href="https://www.facebook.com/Oleariamamerto/?locale=it_IT" class="text-white me-3" aria-label="Facebook" target="blank">
                         <i class="bi bi-facebook fs-3"></i>
                     </a>

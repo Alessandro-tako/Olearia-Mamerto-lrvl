@@ -6,16 +6,29 @@
     <x-success-message />
 
     <main class="container mt-4">
-        <!-- Form ricerca -->
-        <form method="GET" action="{{ route('admin.orders') }}" class="mb-4 text-start">
-            <label for="search" class="form-label text-white">Cerca ordini (#ID, email, stato):</label>
-            <div class="input-group">
-                <input type="text" name="search" id="search" class="form-control" value="{{ request('search') }}"
-                    placeholder="es: mario@rossi.it o 123">
-                <button class="btn btn-outline-light" type="submit">Cerca</button>
-            </div>
-        </form>
+        <!-- Verifica se l'utente è cancellato o meno -->
+        @php
+            $userIsDeleted = false;
+            if (Auth::user() && Auth::user()->deleted_at) {
+                $userIsDeleted = true;
+            }
+        @endphp
 
+        <!-- Barra di ricerca visibile solo se l'utente non è cancellato -->
+        @if (!$userIsDeleted)
+            <form method="GET" action="{{ route('admin.orders') }}" class="mb-4 text-start">
+                <label for="search" class="form-label text-white">Cerca ordini (#ID, email, stato):</label>
+                <div class="input-group">
+                    <input type="text" name="search" id="search" class="form-control" value="{{ request('search') }}"
+                        placeholder="es: mario@rossi.it o 123">
+                    <button class="btn btn-outline-light" type="submit">Cerca</button>
+                </div>
+            </form>
+        @else
+            <p class="text-muted">Non è possibile cercare ordini. L'utente è stato eliminato.</p>
+        @endif
+
+        <!-- Visualizzazione degli ordini -->
         @forelse ($orders as $order)
             @php
                 $hasValidUser = $order->user && optional($order->user->shippingAddress)->first_name;
@@ -89,12 +102,11 @@
                                     </div>
                                 </form>
                             @else
-                                <div class=" p-2 small mb-0">
+                                <div class="p-2 small mb-0">
                                     ⚠️ Utente eliminato: impossibile aggiornare lo stato dell’ordine.
                                 </div>
                             @endif
                         </div>
-                        
                     </div>
 
                     <button class="btn btn-sm btn-outline-dark mb-2" data-bs-toggle="collapse"

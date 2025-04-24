@@ -114,7 +114,7 @@
                                                     $progress = 100;
                                                     $statusClass = 'bg-success';
                                                     break;
-                                                case 'Cancellato':
+                                                case 'Annullato':
                                                     $progress = 0;
                                                     $statusClass = 'bg-danger';
                                                     break;

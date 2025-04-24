@@ -84,7 +84,7 @@ class OrderController extends Controller
     
         // Validazione dello stato
         $validated = $request->validate([
-            'status' => 'required|in:Pagato e in attesa,Confermato,Spedito,Cancellato,Utente eliminato',
+            'status' => 'required|in:Pagato e in attesa,Confermato,Spedito,Annullato,Utente eliminato',
         ]);
     
         // Calcolare il totale dell'ordine con lo sconto in valore assoluto
@@ -121,7 +121,7 @@ class OrderController extends Controller
                 Mail::to($order->user->email)->send(new OrderShippedMail($order, $total));
                 break;
     
-            case 'Cancellato':
+            case 'Annullato':
                 Mail::to($order->user->email)->send(new OrderCancelledMail($order, $total));
                 break;
         }

@@ -20,7 +20,7 @@ class CreateOrdersTable extends Migration
 
             $table->decimal('total_amount', 8, 2);
 
-            $table->enum('status', ['Pagato e in attesa', 'Confermato', 'Spedito', 'Cancellato'])->default('Pagato e in attesa');
+            $table->enum('status', ['Pagato e in attesa', 'Confermato', 'Spedito', 'Annullato'])->default('Pagato e in attesa');
 
             $table->timestamps();
         });

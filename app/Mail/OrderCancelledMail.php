@@ -29,7 +29,7 @@ class OrderCancelledMail extends Mailable
     public function build()
     {
         return $this->to($this->order->user->email)
-                    ->subject('Il tuo ordine è stato cancellato!')
+                    ->subject('Il tuo ordine è stato Annullato!')
                     ->markdown('emails.orders.cancelled')
                     ->with(['order' => $this->order]);
     }

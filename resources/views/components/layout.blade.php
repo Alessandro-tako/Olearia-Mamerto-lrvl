@@ -7,11 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <!-- Meta Description -->
-    <meta name="description" content="Olearia Mamerto è un'azienda agricola che produce olio extravergine di oliva di alta qualità, coltivato in Calabria con passione e tecniche innovative.">
+    <meta name="description"
+        content="Olearia Mamerto è un'azienda agricola che produce olio extravergine di oliva di alta qualità, coltivato in Calabria con passione e tecniche innovative.">
 
     <!-- Open Graph meta tags for social sharing -->
     <meta property="og:title" content="Olearia Mamerto">
-    <meta property="og:description" content="Olearia Mamerto produce olio extravergine di oliva di qualità superiore, disponibile online.">
+    <meta property="og:description"
+        content="Olearia Mamerto produce olio extravergine di oliva di qualità superiore, disponibile online.">
     <meta property="og:image" content="{{ asset('images/fotoprincipale.bmp') }}">
     <meta property="og:url" content="{{ url('/') }}">
     <meta property="og:type" content="website">
@@ -39,6 +41,17 @@
 
     <!-- Vite for custom styles and scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- body con immagine foglie di sfondo --}}
+    {{-- <style>
+        body {
+            background-image: url('/images/bg-texture-olive.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-top: 200px;
+        }
+    </style> --}}
 
     <title>{{ config('app.name') }}</title>
 </head>

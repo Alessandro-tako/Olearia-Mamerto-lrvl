@@ -73,7 +73,7 @@
                                         @case('Spedito')
                                             <span class="badge bg-success">{{ $order->status }}</span>
                                             @break
-                                        @case('Cancellato')
+                                        @case('Annullato')
                                             <span class="badge bg-danger">{{ $order->status }}</span>
                                             @break
                                         @default
@@ -92,7 +92,7 @@
                                     @method('PATCH')
                                     <div class="input-group">
                                         <select name="status" class="form-select">
-                                            @foreach (['Pagato e in attesa', 'Confermato', 'Spedito', 'Cancellato'] as $status)
+                                            @foreach (['Pagato e in attesa', 'Confermato', 'Spedito', 'Annullato'] as $status)
                                                 <option value="{{ $status }}" {{ $order->status == $status ? 'selected' : '' }}>
                                                     {{ $status }}
                                                 </option>

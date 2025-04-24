@@ -24,13 +24,13 @@
                     {{ $item->quantity }} x {{ $item->article->title }} - 
                     @if($item->article->discount > 0)
                         <span style="text-decoration: line-through; color: red;">
-                            €{{ number_format($item->article->price, 2) }}
+                            {{ number_format($item->article->price, 2) }}€
                         </span> 
                         <span style="color: #228b22;">
-                            €{{ number_format($item->article->price - $item->article->discount, 2) }}
+                            {{ number_format($item->article->price - $item->article->discount, 2) }}€
                         </span>
                     @else
-                        €{{ number_format($item->article->price, 2) }}
+                        {{ number_format($item->article->price, 2) }}€
                     @endif
                 </li>
             @endforeach
@@ -39,13 +39,13 @@
         <p style="font-size: 16px; line-height: 1.5;">Totale: 
             @if($order->total_discount > 0)
                 <span style="text-decoration: line-through; color: red;">
-                    €{{ number_format($order->total_amount, 2) }}
+                    {{ number_format($order->total_amount, 2) }}€
                 </span> 
                 <span style="color: #228b22;">
-                    €{{ number_format($order->total_amount - $order->total_discount, 2) }}
+                    {{ number_format($order->total_amount - $order->total_discount, 2) }}€
                 </span>
             @else
-                €{{ number_format($order->total_amount, 2) }}
+                {{ number_format($order->total_amount, 2) }}€
             @endif
         </p>
 

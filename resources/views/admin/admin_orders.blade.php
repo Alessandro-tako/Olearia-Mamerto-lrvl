@@ -58,7 +58,7 @@
                                 }
                             @endphp
 
-                            <p class="mb-1"><strong>Totale:</strong> €{{ number_format($total, 2, ',', '.') }}</p>
+                            <p class="mb-1"><strong>Totale:</strong> {{ number_format($total, 2, ',', '.') }}€</p>
 
                             @if ($hasValidUser)
                                 <p class="mb-1">
@@ -130,7 +130,7 @@
                                         <li><strong>Telefono:</strong> {{ $order->user->shippingAddress->phone_number }}</li>
                                     </ul>
                                 @else
-                                    <p class="text-muted">Indirizzo non disponibile. L'utente potrebbe essere stato eliminato.</p>
+                                    <p class="text-muted">Indirizzo non disponibile. Utente eliminato.</p>
                                 @endif
                             </div>
 
@@ -143,14 +143,14 @@
                                             {{ $item->quantity }} – 
                                             @if ($item->article->discount > 0)
                                                 <span class="text-decoration-line-through text-muted">
-                                                    €{{ number_format($item->article->price, 2, ',', '.') }}
+                                                    {{ number_format($item->article->price, 2, ',', '.') }}€
                                                 </span>
                                                 <span class="ms-1 text-success fw-semibold">
-                                                    €{{ number_format($item->article->price - $item->article->discount, 2, ',', '.') }}
+                                                    {{ number_format($item->article->price - $item->article->discount, 2, ',', '.') }}€
                                                 </span>
                                             @else
                                                 <span class="fw-semibold">
-                                                    €{{ number_format($item->article->price, 2, ',', '.') }}
+                                                    {{ number_format($item->article->price, 2, ',', '.') }}€
                                                 </span>
                                             @endif
                                         </li>

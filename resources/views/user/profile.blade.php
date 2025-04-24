@@ -125,7 +125,7 @@
                                         @endphp
                                         <tr>
                                             <td>{{ $order->id }}</td>
-                                            <td>€ {{ number_format($total, 2, ',', '.') }}</td>
+                                            <td>{{ number_format($total, 2, ',', '.') }}€</td>
                                             <td>
                                                 <span class="badge {{ $statusClass }}">
                                                     {{ $order->status }}

@@ -18,19 +18,27 @@
         {{-- Prezzo --}}
         <p class="card-price h5">
             @if ($article->stock > 0)
-                €{{ number_format($article->price - $article->discount, 2, ',', '.') }}
                 @if ($article->discount > 0)
-                    <span class="text-success text-decoration-line-through fs-6 ms-2">
-                        €{{ number_format($article->price, 2, ',', '.') }}
+                    <span class="text-success">
+                        {{ number_format($article->price - $article->discount, 2, ',', '.') }}€
+                    </span>
+                    <span class="text-decoration-line-through fs-6 ms-2">
+                        {{ number_format($article->price, 2, ',', '.') }}€
+                    </span>
+                @else
+                    <span class="text-dark">
+                        {{ number_format($article->price, 2, ',', '.') }}€
                     </span>
                 @endif
             @else
                 <span class="text-danger text-decoration-line-through fs-6">
-                    €{{ number_format($article->price - $article->discount, 2, ',', '.') }}
+                    {{ number_format($article->price - $article->discount, 2, ',', '.') }}€
                 </span>
                 <span class="text-danger fs-6 ms-2">Sold Out</span>
             @endif
         </p>
+        
+        
 
         <div class="container">
             <div class="row justify-content-evenly align-items-center">

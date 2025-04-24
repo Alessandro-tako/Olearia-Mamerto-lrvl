@@ -28,7 +28,7 @@
 
                             <div class="col-12 col-md-8 mt-4">
                                 <h4 class="mb-2">{{ $article_to_check->title }}</h4>
-                                <h5 class="text-success">€{{ number_format($article_to_check->price, 2) }}</h5>
+                                <h5 class="text-success">{{ number_format($article_to_check->price, 2) }}€</h5>
                                 <p class="mt-3">{{ $article_to_check->description }}</p>
                             </div>
                         </div>

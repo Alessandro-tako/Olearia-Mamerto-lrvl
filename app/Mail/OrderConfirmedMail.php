@@ -33,7 +33,7 @@ class OrderConfirmedMail extends Mailable
         }
 
         return $this->to($this->order->user->email)
-                    ->subject('Il tuo ordine è stato confermato!')
+                    ->subject('📦 Il tuo ordine è stato confermato!')
                     ->markdown('emails.orders.confirmed')
                     ->with(['order' => $this->order]);
     }

@@ -29,7 +29,7 @@ class OrderShippedMail extends Mailable
     public function build()
     {
         return $this->to($this->order->user->email)
-                    ->subject('Il tuo ordine è stato spedito!')
+                    ->subject('🚚 Il tuo ordine è stato spedito!')
                     ->view('emails.orders.shipped')
                     ->with(['order' => $this->order]);
     }

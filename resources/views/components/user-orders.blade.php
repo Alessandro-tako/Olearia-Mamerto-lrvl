@@ -8,7 +8,7 @@
         <div class="card bg-dark text-white mb-4 shadow rounded">
             <div class="card-body">
                 <h5 class="card-title">Ordine #{{ $order->id }}</h5>
-                <p class="card-text mb-1">Totale: <strong>€{{ number_format($order->total_amount, 2) }}</strong></p>
+                <p class="card-text mb-1">Totale: <strong>{{ number_format($order->total_amount, 2) }}€</strong></p>
                 <p class="card-text mb-3">Stato: <span class="badge bg-info text-dark">{{ ucfirst($order->status) }}</span></p>
 
                 <h6>Articoli ordinati:</h6>
@@ -19,7 +19,7 @@
                                 {{ $item->article->title }}<br>
                                 <small>Quantità: {{ $item->quantity }}</small>
                             </div>
-                            <span>€{{ number_format($item->price, 2) }}</span>
+                            <span>{{ number_format($item->price, 2) }}€</span>
                         </li>
                     @endforeach
                 </ul>

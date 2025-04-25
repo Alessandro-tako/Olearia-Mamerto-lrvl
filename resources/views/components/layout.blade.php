@@ -22,7 +22,8 @@
     <meta name="twitter:title" content="Olearia Mamerto">
     <meta name="twitter:description" content="Olearia Mamerto produce olio extravergine di oliva di qualità superiore.">
     <meta name="twitter:image" content="{{ asset('images/fotoprincipale.bmp') }}">
-    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:card" content="summary_large_image"
+
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.png') }}">
@@ -52,6 +53,8 @@
             margin-top: 200px;
         }
     </style> --}}
+    {{-- link aos (animation on scrolling) --}}
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
     <title>{{ config('app.name') }}</title>
 </head>
@@ -86,6 +89,17 @@
 
     <!-- Footer -->
     <x-footer></x-footer>
+    {{-- script aos --}}
+    <!-- AOS JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        // Inizializza AOS
+        AOS.init({
+            duration: 1000, // Durata delle animazioni
+            easing: 'ease-in-out',
+            once: true // L'animazione si esegue una sola volta
+        });
+    </script>
 
 </body>
 

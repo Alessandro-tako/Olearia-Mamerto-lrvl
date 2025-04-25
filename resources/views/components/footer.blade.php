@@ -42,7 +42,7 @@
 
         <div class="row mt-4">
             <div class="col-12 text-center">
-                <p class="text-white mb-0">&copy; 2025 Olearia Mamerto. Tutti i diritti riservati.</p>
+                <p class="text-white mb-0">&copy; 2017 Olearia Mamerto. Tutti i diritti riservati.</p>
                 <p class="text-white small">🔥 Powered by Takohr • il Forgiatore di Codice ⚒️</p>
             </div>
         </div>

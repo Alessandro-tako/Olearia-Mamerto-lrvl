@@ -56,10 +56,9 @@
                             <span class="text-danger text-decoration-line-through ms-2">
                                 {{ number_format($article->price - $article->discount, 2, ',', '.') }}€
                             </span>
-                            <span class="text-danger ms-2">Sold Out</span>
                         @endif
                     </h4>
-                    
+
 
                     <h5>Descrizione:</h5>
                     <p>{{ $article->description }}</p>
@@ -110,14 +109,25 @@
                         @if ($article->stock > 0)
                             <form action="{{ route('cart.add', $article->id) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn-custom">Aggiungi al carrello <i class="bi bi-cart"></i></button>
+                                <div class="row justify-content-evenly">
+                                    <div class="col-7 col-md-2 my-3">
+                                        <input type="number" name="quantity" value="1" min="1"
+                                            max="{{ $article->stock }}" class="form-control" />
+                                    </div>
+                                    <div class="col-7 my-3">
+                                        <button type="submit" class="btn btn-custom w-100">
+                                            Aggiungi al carrello <i class="bi bi-cart"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </form>
                         @else
-                        <div class="col-12 col-md-6 mt-3">
-                            <button type="button" class="btn btn-custom w-100" disabled>
-                                Aggiungi al <i class="bi bi-cart"></i> (Sold Out)
-                            </button>
-                        </div>
+                            <div class="col-12 mt-3">
+                                <button type="button" class="btn btn-custom w-100" disabled>
+                                    Aggiungi al <i class="bi bi-cart"></i> (Sold Out)
+                                </button>
+                                <p class="mt-2 text-danger">Scorte esaurite.</p>
+                            </div>
                         @endif
                     @endif
                 </div>

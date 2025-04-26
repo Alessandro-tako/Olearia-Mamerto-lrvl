@@ -93,17 +93,18 @@
                 {{-- Carrello --}}
                 {{-- Carrello, visibile solo agli utenti non admin --}}
                 @if (Auth::check() && !Auth::user()->is_admin)
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('cart.show') }}">
-                            <i class="bi bi-cart"></i>
-                            @if (\App\Models\Cart::itemCount() > 0)
-                                <span class="badge custom-badge">
-                                    {{ \App\Models\Cart::itemCount() }}
-                                </span>
-                            @endif
-                        </a>
-                    </li>
-                @endif
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('cart.show') }}">
+                        <i class="bi bi-cart"></i>
+                        @if (\App\Models\Cart::itemCount() > 0)
+                            <span class="badge custom-badge">
+                                {{ \App\Models\Cart::itemCount() }}
+                            </span>
+                        @endif
+                    </a>
+                </li>
+            @endif
+            
             </ul>
         </div>
     </div>

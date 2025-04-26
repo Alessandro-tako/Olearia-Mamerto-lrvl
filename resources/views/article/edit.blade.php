@@ -5,12 +5,6 @@
             <div class="col-12 col-md-6">
                 <h2 class="text-center my-4">Modifica Articolo</h2>
 
-                @if (session()->has('message'))
-                    <div class="alert alert-success text-center shadow rounded">
-                        {{ session('message') }}
-                    </div>
-                @endif
-
                 <form action="{{ route('article.update', $article->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')

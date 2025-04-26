@@ -30,12 +30,6 @@ class Cart extends Model
     // Metodo per contare gli articoli nel carrello dell'utente autenticato
     public static function itemCount()
     {
-        $user = Auth::user();
-
-        if (!$user) {
-            return 0;
-        }
-
-        return self::where('user_id', $user->id)->count();
+        return Cart::where('user_id', Auth::id())->sum('quantity');
     }
 }

@@ -3,8 +3,6 @@
         <h1><i class="bi bi-pencil-square textColor fs-1"></i> Zona di Revisione</h1>
     </header>
 
-    <x-success-message />
-
     <main class="container mt-4">
         <div class="row height-custom justify-content-center align-items-center py-5">
             <div class="col-12 col-md-8">

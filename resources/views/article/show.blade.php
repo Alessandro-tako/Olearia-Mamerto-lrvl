@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row justify-content-center align-items-center text-center">
             <div class="col-12 py-5 my-2">
-                <h1 class="display-4">Dettaglio: {{ $article->title }}</h1>
+                <h1 class="display-4 fst-italic">Dettaglio: <span class="fw-bold">{{ $article->title }}</span></h1>
             </div>
             <x-success-message></x-success-message>
 
@@ -38,8 +38,6 @@
             </div>
 
             <div class="col-12 col-md-6 mb-3 text-center">
-                <h2 class="display-5"><span class="fw-bold">Titolo: </span> {{ $article->title }}</h2>
-
                 <div class="d-flex flex-column justify-content-center h-75">
                     <h4 class="card-price">
                         Prezzo:
@@ -107,28 +105,32 @@
                     @else
                         <!-- Pulsante Aggiungi al carrello o Sold Out -->
                         @if ($article->stock > 0)
-                            <form action="{{ route('cart.add', $article->id) }}" method="POST">
-                                @csrf
-                                <div class="row justify-content-evenly">
-                                    <div class="col-7 col-md-2 my-3">
-                                        <input type="number" name="quantity" value="1" min="1"
-                                            max="{{ $article->stock }}" class="form-control" />
-                                    </div>
-                                    <div class="col-7 my-3">
-                                        <button type="submit" class="btn btn-custom w-100">
-                                            Aggiungi al carrello <i class="bi bi-cart"></i>
-                                        </button>
-                                    </div>
+                        <form action="{{ route('cart.add', $article->id) }}" method="POST">
+                            @csrf
+                            <div class="row justify-content-evenly">
+                                <div class="col-12 mb-2">
+                                    <p class=" fst-italic">Disponibili: {{ $article->stock }}</p>
                                 </div>
-                            </form>
-                        @else
-                            <div class="col-12 mt-3">
-                                <button type="button" class="btn btn-custom w-100" disabled>
-                                    Aggiungi al <i class="bi bi-cart"></i> (Sold Out)
-                                </button>
-                                <p class="mt-2 text-danger">Scorte esaurite.</p>
+                                <div class="col-7 col-md-2 my-3">
+                                    <input type="number" name="quantity" value="1" min="1"
+                                        max="{{ $article->stock }}" class="form-control" />
+                                </div>
+                                <div class="col-7 my-3">
+                                    <button type="submit" class="btn btn-custom w-100">
+                                        Aggiungi al carrello <i class="bi bi-cart"></i>
+                                    </button>
+                                </div>
                             </div>
-                        @endif
+                        </form>
+                    @else
+                        <div class="col-12 mt-3">
+                            <button type="button" class="btn btn-custom w-100" disabled>
+                                (Sold Out)
+                            </button>
+                            <p class="mt-2 text-danger">Scorte esaurite.</p>
+                        </div>
+                    @endif
+                    
                     @endif
                 </div>
             </div>

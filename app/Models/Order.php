@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Order extends Model
 {
     use Searchable;
-    
+
     protected $fillable = [
         'user_id',
         'user_name',
@@ -24,8 +24,8 @@ class Order extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withDefault([
-            'name' => $this->user_name,  // Nome utente personalizzato
-            'email' => $this->user_email, // Email utente personalizzato
+            'name' => $this->user_name,
+            'email' => $this->user_email,
         ]);
     }
 
@@ -34,39 +34,36 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    // Metodo per calcolare il totale dell'ordine
-    public function calculateTotal()
-    {
-        $total = 0;
-
-        foreach ($this->items as $item) {
-            $total += $item->price * $item->quantity;
-        }
-
-        return $total;
-    }
-
     public function shippingAddress()
     {
         return $this->user->shippingAddress;
     }
-    
+
+    public function calculateTotal()
+    {
+        return $this->items->sum(function ($item) {
+            return $item->price * $item->quantity;
+        });
+    }
 
     public static function newOrdersCount()
     {
         return self::where('status', 'Pagato e in attesa')->count();
     }
 
+    // Miglioramento della ricerca
     public function toSearchableArray()
-{
-    return [
-        'id' => $this->id,
-        'status' => $this->status,
-        'total_amount' => $this->total_amount,
-        'user_email' => optional($this->user)->email,
-    ];
-}
-
-
-
+    {
+        return [
+            'id' => $this->id,
+            'order_id' => 'Ordine #' . $this->id, // Rende visibile l'ID con il prefisso "Ordine #"
+            'plain_order_id' => $this->id, // Campo per ricerca numerica
+            'status' => $this->status,
+            'user_name' => $this->user_name ?? optional($this->user)->name,
+            'user_email' => $this->user_email ?? optional($this->user)->email,
+            'total_amount' => $this->total_amount,
+            'formatted_total' => number_format($this->total_amount, 2, ',', '.') . ' €',
+            'created_at_formatted' => optional($this->created_at)->format('d/m/Y H:i'),
+        ];
+    }
 }

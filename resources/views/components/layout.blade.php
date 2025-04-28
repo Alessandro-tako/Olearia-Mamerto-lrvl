@@ -22,10 +22,7 @@
     <meta name="twitter:title" content="Olearia Mamerto">
     <meta name="twitter:description" content="Olearia Mamerto produce olio extravergine di oliva di qualità superiore.">
     <meta name="twitter:image" content="{{ asset('images/fotoprincipale.bmp') }}">
-    <meta name="twitter:card" content="summary_large_image"
-
-
-    <!-- Favicon -->
+    <meta name="twitter:card" content="summary_large_image" <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.png') }}">
 
     <!-- Bootstrap CSS -->
@@ -70,6 +67,15 @@
             <button type="button" class="btn-close" @click="show = false" aria-label="Chiudi"></button>
         </div>
     @endif
+
+    @if (session('error'))
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)"
+            class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" @click="show = false" aria-label="Chiudi"></button>
+        </div>
+    @endif
+
 
     <!-- Cookie Banner (Temporaneo) -->
     {{-- <script type="text/javascript">

@@ -44,7 +44,7 @@ class Form extends Component
             'stock' => 'required|integer|min:0',
             'unit' => 'nullable|string|max:10',
             'published_at' => 'nullable|date',
-            'temporary_images.*' => 'image|max:2048',
+            'temporary_images.*' => 'image|max:20480',
         ];
     }
 

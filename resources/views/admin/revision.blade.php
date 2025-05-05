@@ -23,12 +23,14 @@
                                     <img src="{{ Storage::url('images/logo-presto.png') }}" class="img-fluid rounded shadow" alt="immagine segnaposto">
                                 </div>
                             @endif
-
                             <div class="col-12 col-md-8 mt-4">
-                                <h4 class="mb-2">{{ $article_to_check->title }}</h4>
-                                <h5 class="text-success">{{ number_format($article_to_check->price, 2) }}€</h5>
-                                <p class="mt-3">{{ $article_to_check->description }}</p>
+                                <h4 class="mb-3"><strong>Titolo:</strong> {{ $article_to_check->title }}</h4>
+                                <p class="mb-2"><strong>Prezzo:</strong> <span class="text-success">{{ number_format($article_to_check->price, 2) }}€</span></p>
+                                <p class="mb-2"><strong>Descrizione:</strong> {{ $article_to_check->description }}</p>
+                                <p class="mb-2"><strong>Stock:</strong> {{ $article_to_check->stock }} {{ $article_to_check->unit }}</p>
                             </div>
+                            
+                            
                         </div>
 
                         <div class="d-flex justify-content-center gap-4 mt-5">

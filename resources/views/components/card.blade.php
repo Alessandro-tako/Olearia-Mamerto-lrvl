@@ -37,7 +37,6 @@
         </div>
     </div>
 
-
     <div class="card-body px-4 py-3">
         <h5 class="card-title text-dark fw-bold mb-2"
             style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
@@ -49,7 +48,7 @@
         </p>
 
         {{-- Prezzo --}}
-        <p class="card-price h5">
+        <p class="card-price h5 mb-3">
             @if ($article->stock > 0)
                 @if ($article->discount > 0)
                     <span class="text-success">
@@ -71,64 +70,57 @@
             @endif
         </p>
 
-        <div class="container">
-            <div class="row justify-content-evenly align-items-center">
-                <a href="{{ route('article.show', ['article' => $article->id]) }}"
-                    class="btn btn-outline-success mt-3 px-4 rounded-pill col-12 col-md-6">
-                    Vai al dettaglio
-                </a>
-
-                {{-- Se l'utente è loggato o è admin, mostriamo anche il tasto "Modifica" e "Elimina" --}}
-                @if ($user && ($user->is_admin || $user->id === $article->user_id))
-                    <div class="row justify-content-center mt-3">
-                        <!-- Modifica -->
-                        <div class="col-6">
-                            <a href="{{ route('article.edit', $article->id) }}"
-                                class="btn btn-secondary rounded-pill w-100">
-                                <i class="bi bi-pencil-fill"></i> Modifica
-                            </a>
-                        </div>
-
-                        <!-- Elimina -->
-                        <div class="col-6">
-                            <form action="{{ route('articles.destroy', $article) }}" method="POST"
-                                onsubmit="return confirm('Sicuro di voler eliminare?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger rounded-pill w-100">
-                                    <i class="bi bi-trash-fill"></i> Elimina
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                @endif
-
-                {{-- Mostra sempre il tasto "Aggiungi al carrello" se l'utente non è admin --}}
-                @if (!$user || !$user->is_admin)
-                    @if ($article->stock > 0)
-                        <div class="col-12 col-md-6 mt-3">
-                            <form action="{{ route('cart.add', $article->id) }}" method="POST">
-                                @csrf
-                                <div class="my-3">
-                                    <input type="number" name="quantity" id="quantity-{{ $article->id }}"
-                                        value="1" min="1" max="{{ $article->stock }}"
-                                        class="form-control" />
-                                </div>
-                                <button type="submit" class="btn btn-custom w-100">
-                                    Aggiungi al <i class="bi bi-cart"></i>
-                                </button>
-                            </form>
-                        </div>
-                    @else
-                        <div class="col-12 col-md-6 my-3">
-                            <button type="button" class="btn btn-custom w-100" disabled>
-                                Aggiungi al <i class="bi bi-cart"></i> (Sold Out)
-                            </button>
-                        </div>
-                    @endif
-                @endif
-
+        {{-- Input quantità e bottone al centro (solo per utenti non admin) --}}
+        @if ($article->stock > 0 && (!$user || !$user->is_admin))
+            <form action="{{ route('cart.add', $article->id) }}" method="POST">
+                @csrf
+                <div class="my-3 text-center">
+                    <input type="number" name="quantity" id="quantity-{{ $article->id }}"
+                        value="1" min="1" max="{{ $article->stock }}"
+                        class="form-control form-control-lg w-50 mx-auto text-center"
+                        placeholder="Quantità" />
+                </div>
+                <div class="d-grid gap-2 col-12 col-md-6 mx-auto">
+                    <button type="submit" class="btn btn-custom">
+                        Aggiungi al <i class="bi bi-cart"></i>
+                    </button>
+                </div>
+            </form>
+        @elseif ($article->stock <= 0 && (!$user || !$user->is_admin))
+            <div class="col-12 col-md-6 my-3 mx-auto">
+                <button type="button" class="btn btn-custom w-100" disabled>
+                    Aggiungi al <i class="bi bi-cart"></i> (Sold Out)
+                </button>
             </div>
+        @endif
+
+        {{-- Tasti di gestione (modifica / elimina) per admin o proprietario --}}
+        @if ($user && ($user->is_admin || $user->id === $article->user_id))
+            <div class="row justify-content-center mt-3">
+                <div class="col-6">
+                    <a href="{{ route('article.edit', $article->id) }}" class="btn btn-secondary rounded-pill w-100">
+                        <i class="bi bi-pencil-fill"></i> Modifica
+                    </a>
+                </div>
+                <div class="col-6">
+                    <form action="{{ route('articles.destroy', $article) }}" method="POST"
+                        onsubmit="return confirm('Sicuro di voler eliminare?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger rounded-pill w-100">
+                            <i class="bi bi-trash-fill"></i> Elimina
+                        </button>
+                    </form>
+                </div>
+            </div>
+        @endif
+
+        {{-- Link al dettaglio prodotto --}}
+        <div class="mt-3">
+            <a href="{{ route('article.show', ['article' => $article->id]) }}"
+                class="btn btn-outline-success px-4 rounded-pill">
+                Vai al dettaglio
+            </a>
         </div>
     </div>
 </div>

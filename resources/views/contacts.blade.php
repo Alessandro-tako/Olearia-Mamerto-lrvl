@@ -26,32 +26,27 @@
                     <dd><a class="text-white" href="mailto:oleariamamerto@gmail.com">oleariamamerto@gmail.com</a></dd>
                 </dl>
 
-                <p data-aos="fade-up" data-aos-delay="400">Per rimanere aggiornato, non dimenticare di seguirci sui social!</p>
+                <p data-aos="fade-up" data-aos-delay="400">Per rimanere aggiornato, non dimenticare di seguirci sui
+                    social!</p>
             </div>
 
             <!-- Link ai social con animazioni alternate -->
             <div class="row justify-content-around g-3">
                 <a href="https://www.facebook.com/Oleariamamerto/?locale=it_IT"
-                    class="button-fb col-10 col-md-3 text-center"
-                    data-aos="zoom-in" data-aos-delay="100"
-                    target="_blank" rel="noopener noreferrer"
-                    aria-label="Segui Olearia Mamerto su Facebook">
+                    class="button-fb col-10 col-md-3 text-center" data-aos="zoom-in" data-aos-delay="100"
+                    target="_blank" rel="noopener noreferrer" aria-label="Segui Olearia Mamerto su Facebook">
                     <i class="bi bi-facebook"></i>
                 </a>
 
-                <a href="https://www.tiktok.com/@oleariamamerto"
-                    class="button-tt col-10 col-md-3 text-center"
-                    data-aos="zoom-in" data-aos-delay="200"
-                    target="_blank" rel="noopener noreferrer"
+                <a href="https://www.tiktok.com/@oleariamamerto" class="button-tt col-10 col-md-3 text-center"
+                    data-aos="zoom-in" data-aos-delay="200" target="_blank" rel="noopener noreferrer"
                     aria-label="Segui Olearia Mamerto su TikTok">
                     <i class="bi bi-tiktok"></i>
                 </a>
 
                 <a href="https://www.instagram.com/oleariamamerto/?locale=us&hl=am-et"
-                    class="button-ig col-10 col-md-3 text-center"
-                    data-aos="zoom-in" data-aos-delay="300"
-                    target="_blank" rel="noopener noreferrer"
-                    aria-label="Segui Olearia Mamerto su Instagram">
+                    class="button-ig col-10 col-md-3 text-center" data-aos="zoom-in" data-aos-delay="300"
+                    target="_blank" rel="noopener noreferrer" aria-label="Segui Olearia Mamerto su Instagram">
                     <i class="bi bi-instagram"></i>
                 </a>
             </div>
@@ -66,4 +61,37 @@
             </div>
         </div>
     </section>
+
+    @push('jsonld')
+        <script type="application/ld+json">
+            {
+            "@context": "https://schema.org",
+            "@type": "ContactPage",
+            "name": "Contattaci",
+            "url": "{{ route('contacts') }}",
+            "mainEntity" : {
+                "@type": "LocalBusiness",
+                "name": "Olearia Mamerto",
+                "image": "{{ asset('images/logo.png') }}",
+                "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Via Pasquale Galluppi, 17",
+                "addressLocality": "Oppido Mamertina",
+                "addressRegion": "RC",
+                "postalCode": "89014",
+                "addressCountry": "IT"
+                },
+                "email": "oleariamamerto@gmail.com",
+                "telephone": ["+39 096686033", "+39 3382017840"],
+                "url": "{{ url('/') }}",
+                "sameAs": [
+                "https://www.facebook.com/Oleariamamerto/?locale=it_IT",
+                "https://www.tiktok.com/@oleariamamerto",
+                "https://www.instagram.com/oleariamamerto"
+                ]
+            }
+            }
+        </script>
+    @endpush
+
 </x-layout>

@@ -6,7 +6,8 @@
                     <h1 class="main-title-font main-title title" data-aos="fade-up">
                         <span class="mainLetterTitle">O</span>learia <span class="mainLetterTitle">M</span>amerto
                     </h1>
-                    <h2 data-aos="fade-up" data-aos-delay="100">Olio Extravergine di alta qualità October EVOO monocultivar OTTOBRATICA</h2>
+                    <h2 data-aos="fade-up" data-aos-delay="100">Olio Extravergine di alta qualità October EVOO
+                        monocultivar OTTOBRATICA</h2>
                     {{-- Testo introduttivo --}}
                     <p class="mt-4 px-3 px-md-5" data-aos="fade-up" data-aos-delay="200">
                         <strong>Benvenuti in Olearia Mamerto</strong>
@@ -14,7 +15,8 @@
                         Nel cuore della piana di Gioia Tauro, a Oppido Mamertina, coltiviamo con passione l'eccellenza
                         dell’olio extravergine di oliva calabrese.
                         Produciamo un EVOO di qualità superiore, pluripremiato e riconosciuto a livello internazionale.
-                        Scopri il gusto autentico della nostra terra, dove tradizione e innovazione si fondono per dar vita
+                        Scopri il gusto autentico della nostra terra, dove tradizione e innovazione si fondono per dar
+                        vita
                         a un prodotto unico.
                         <br>
                         <strong>Olearia Mamerto – Tradizione, innovazione e qualità.</strong><br>
@@ -61,11 +63,39 @@
                     amaro-piccante, il tutto, sempre, in perfetto equilibrio.
                     <br>
                     <strong>October Evoo</strong> è un olio pregiato ed esclusivo, per chi desidera un gusto unico ed
-                    inconfondibile, per viziare il palato e per chi cerca un prodotto che unisce eccellenza e rispetto per
+                    inconfondibile, per viziare il palato e per chi cerca un prodotto che unisce eccellenza e rispetto
+                    per
                     l’ambiente.
                 </p>
             </article>
         </div>
     </section>
-    
+
+    @push('jsonld')
+        <script type="application/ld+json">
+            {!! json_encode([
+                "@context" => "https://schema.org",
+                "@type" => "LocalBusiness",
+                "name" => "Olearia Mamerto",
+                "image" => asset('images/fotoprincipale.bmp'),
+                "description" => "Azienda agricola calabrese produttrice di olio extravergine di oliva monocultivar Ottobratica di alta qualità.",
+                "url" => url('/'),
+                "telephone" => "+39 338 2017840",
+                "address" => [
+                    "@type" => "PostalAddress",
+                    "streetAddress" => "Contrada Mamerto",
+                    "addressLocality" => "Oppido Mamertina",
+                    "addressRegion" => "RC",
+                    "postalCode" => "89014",
+                    "addressCountry" => "IT"
+                ],
+                "sameAs" => [
+                    "https://www.instagram.com/oleariamamerto",
+                    "https://www.facebook.com/oleariamamerto"
+                ]
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
+        </script>
+    @endpush
+
+
 </x-layout>

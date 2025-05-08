@@ -1,6 +1,8 @@
 <?php
 
 use App\Livewire\Cart;
+use Spatie\Sitemap\Sitemap;
+use Spatie\Sitemap\Tags\Url;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PageController;
@@ -72,4 +74,23 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware('auth')->group(function () {
     // Per l'utente
     Route::get('/orders', [OrderController::class, 'userOrders'])->name('orders.index');
+});
+
+
+// sitemap per google
+
+Route::get('/sitemap.xml', function () {
+    $sitemap = Sitemap::create()
+        ->add(Url::create(route('homepage')))
+        ->add(Url::create(route('contacts')))
+        ->add(Url::create(route('contact.form')))
+        ->add(Url::create(route('chi-siamo')))
+        ->add(Url::create(route('galleria')))
+        ->add(Url::create(route('article.index')));
+
+    foreach (Article::all() as $article) {
+        $sitemap->add(Url::create(route('article.show', $article)));
+    }
+
+    return $sitemap->toResponse(request());
 });

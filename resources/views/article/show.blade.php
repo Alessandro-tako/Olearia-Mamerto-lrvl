@@ -105,32 +105,32 @@
                     @else
                         <!-- Pulsante Aggiungi al carrello o Sold Out -->
                         @if ($article->stock > 0)
-                        <form action="{{ route('cart.add', $article->id) }}" method="POST">
-                            @csrf
-                            <div class="row justify-content-evenly">
-                                <div class="col-12 mb-2">
-                                    <p class=" fst-italic">Disponibili: {{ $article->stock }}</p>
+                            <form action="{{ route('cart.add', $article->id) }}" method="POST">
+                                @csrf
+                                <div class="row justify-content-evenly">
+                                    <div class="col-12 mb-2">
+                                        <p class=" fst-italic">Disponibili: {{ $article->stock }}</p>
+                                    </div>
+                                    <div class="col-7 col-md-2 my-3">
+                                        <input type="number" name="quantity" value="1" min="1"
+                                            max="{{ $article->stock }}" class="form-control" />
+                                    </div>
+                                    <div class="col-7 my-3">
+                                        <button type="submit" class="btn btn-custom w-100">
+                                            Aggiungi al carrello <i class="bi bi-cart"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="col-7 col-md-2 my-3">
-                                    <input type="number" name="quantity" value="1" min="1"
-                                        max="{{ $article->stock }}" class="form-control" />
-                                </div>
-                                <div class="col-7 my-3">
-                                    <button type="submit" class="btn btn-custom w-100">
-                                        Aggiungi al carrello <i class="bi bi-cart"></i>
-                                    </button>
-                                </div>
+                            </form>
+                        @else
+                            <div class="col-12 mt-3">
+                                <button type="button" class="btn btn-custom w-100" disabled>
+                                    (Sold Out)
+                                </button>
+                                <p class="mt-2 text-danger">Scorte esaurite.</p>
                             </div>
-                        </form>
-                    @else
-                        <div class="col-12 mt-3">
-                            <button type="button" class="btn btn-custom w-100" disabled>
-                                (Sold Out)
-                            </button>
-                            <p class="mt-2 text-danger">Scorte esaurite.</p>
-                        </div>
-                    @endif
-                    
+                        @endif
+
                     @endif
                 </div>
             </div>
@@ -144,4 +144,29 @@
             document.getElementById('mainImage').src = imageUrl;
         }
     </script>
+
+    @push('jsonld')
+        <script type="application/ld+json">
+{!! json_encode([
+    "@context" => "https://schema.org",
+    "@type" => "Product",
+    "name" => $article->title,
+    "image" => $article->images->pluck('url')->map(fn($url) => asset('storage/' . $url))->values()->all(),
+    "description" => $article->description,
+    "sku" => $article->sku,
+    "brand" => [
+        "@type" => "Brand",
+        "name" => "Olearia Mamerto"
+    ],
+    "offers" => [
+        "@type" => "Offer",
+        "priceCurrency" => "EUR",
+        "price" => number_format($article->price - $article->discount, 2),
+        "availability" => $article->stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+        "url" => route('article.show', $article->slug)
+    ]
+], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
+</script>
+    @endpush
+
 </x-layout>
